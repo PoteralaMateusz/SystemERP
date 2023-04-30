@@ -1,4 +1,4 @@
-package com.mateusz.SystemERP.model;
+package com.mateusz.SystemERP.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
