@@ -20,11 +20,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
     private LocalDateTime orderDate;
     private LocalDateTime deadline;
     private BigDecimal price;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "order")
     private List<Product> products;
 
 }

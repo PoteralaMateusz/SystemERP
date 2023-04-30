@@ -17,6 +17,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
     @OneToMany
     private List<Item> items;
 
