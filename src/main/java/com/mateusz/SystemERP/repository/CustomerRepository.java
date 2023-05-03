@@ -7,20 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-@RequiredArgsConstructor
-public class CustomerRepository {
-    private final ICustomerRepository repository;
 
-    public List<Customer> getAllCustomers(){
-        return repository.findAll();
-    }
+public interface CustomerRepository {
+    List<Customer> getAllCustomers();
 
-    public Optional<Customer> getCustomerByName(String name){
-        return repository.findCustomerByName(name);
-    }
+    Optional<Customer> getCustomerByName(String name);
 
-    public void addCustomer(Customer customer){
-        repository.save(customer);
-    }
+    void addCustomer(Customer customer);
 }

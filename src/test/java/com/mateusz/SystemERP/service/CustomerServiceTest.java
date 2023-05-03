@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,7 +37,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw 201 status and customers list in body")
+    @DisplayName("Should throw 200 status and customers list in body")
     void getAllCustomers_customersList_noEmpty() {
         //given
         CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
@@ -103,5 +101,74 @@ class CustomerServiceTest {
 
         assertThat(result.getBody().getName())
                 .isEqualTo("Company");
+    }
+
+    @Test
+    @DisplayName("Should throw 400 status when name is empty")
+    void addCustomer_nameIsBlank() {
+        //given
+        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        String name = " ";
+        //when
+        ResponseEntity<?> result = toTest.addCustomer(name);
+        //then
+
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatusCode.valueOf(400));
+    }
+
+    @Test
+    @DisplayName("Should throw 409 status when customer exist in DB")
+    void addCustomer_customerNameExistInDB() {
+        //given
+        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        String name = "Company";
+        toTest.addCustomer(name);
+        //when
+        ResponseEntity<?> result = toTest.addCustomer(name);
+        //then
+
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatusCode.valueOf(409));
+    }
+    @Test
+    @DisplayName("Should throw 201 status and add customer to DB when name is correct")
+    void addCustomer_nameIsCorrect() {
+        //given
+        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        String name = "Company";
+        //when
+        ResponseEntity<?> result = toTest.addCustomer(name);
+        ResponseEntity<Customer> findAddedCustomer = toTest.getCustomerByName(name);
+        //then
+
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatusCode.valueOf(201));
+        assertThat(findAddedCustomer.getStatusCode())
+                .isEqualTo(HttpStatusCode.valueOf(200));
+        assertThat(findAddedCustomer.getBody().getName())
+                .isEqualTo(name);
+
+    }
+
+    private CustomerRepository inMemoryGroupRepository(){
+        return new CustomerRepository() {
+
+            private Map<String,Customer> mapDB = new HashMap<>();
+            @Override
+            public List<Customer> getAllCustomers() {
+                return new ArrayList<>(mapDB.values());
+            }
+
+            @Override
+            public Optional<Customer> getCustomerByName(String name) {
+                return Optional.ofNullable(mapDB.get(name));
+            }
+
+            @Override
+            public void addCustomer(Customer customer) {
+                mapDB.put(customer.getName(), customer);
+            }
+        };
     }
 }
