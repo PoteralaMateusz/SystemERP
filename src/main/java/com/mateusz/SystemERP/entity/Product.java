@@ -20,7 +20,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "product")
     private List<Item> items;
     private double totalWeight;
 
