@@ -15,8 +15,6 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String name;
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;

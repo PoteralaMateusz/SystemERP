@@ -43,6 +43,11 @@ public class CustomerService {
                     .status(400)
                     .build();
         }
+        if(repository.getCustomerByName(name).isPresent()){
+            return ResponseEntity
+                    .status(409)
+                    .build();
+        }
         repository.addCustomer(new Customer(name));
         return ResponseEntity
                 .status(201)
