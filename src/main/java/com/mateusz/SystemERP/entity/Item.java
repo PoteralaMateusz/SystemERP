@@ -24,4 +24,11 @@ public class Item {
     private int pieces;
     private double weight;
 
+    public Item(Product product, String material, String quality, int pieces, double weight) {
+        this.product = product;
+        this.material = material;
+        this.quality = quality;
+        this.pieces = pieces;
+        this.weight = weight;
+    }
 }

@@ -107,7 +107,7 @@ class CustomerServiceTest {
     @DisplayName("Should throw 400 status when name is empty")
     void addCustomer_nameIsBlank() {
         //given
-        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        CustomerService toTest = new CustomerService(inMemoryCustomerRepository());
         String name = " ";
         //when
         ResponseEntity<?> result = toTest.addCustomer(name);
@@ -121,7 +121,7 @@ class CustomerServiceTest {
     @DisplayName("Should throw 409 status when customer exist in DB")
     void addCustomer_customerNameExistInDB() {
         //given
-        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        CustomerService toTest = new CustomerService(inMemoryCustomerRepository());
         String name = "Company";
         toTest.addCustomer(name);
         //when
@@ -135,7 +135,7 @@ class CustomerServiceTest {
     @DisplayName("Should throw 201 status and add customer to DB when name is correct")
     void addCustomer_nameIsCorrect() {
         //given
-        CustomerService toTest = new CustomerService(inMemoryGroupRepository());
+        CustomerService toTest = new CustomerService(inMemoryCustomerRepository());
         String name = "Company";
         //when
         ResponseEntity<?> result = toTest.addCustomer(name);
@@ -151,7 +151,7 @@ class CustomerServiceTest {
 
     }
 
-    private CustomerRepository inMemoryGroupRepository(){
+    private CustomerRepository inMemoryCustomerRepository(){
         return new CustomerRepository() {
 
             private Map<String,Customer> mapDB = new HashMap<>();
