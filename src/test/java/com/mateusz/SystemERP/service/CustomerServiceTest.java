@@ -22,7 +22,7 @@ class CustomerServiceTest {
         //given
         CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
         List<Customer> emptyList = new ArrayList<>();
-        when(mockCustomerRepository.getAllCustomers()).thenReturn(emptyList);
+        when(mockCustomerRepository.findAll()).thenReturn(emptyList);
 
         //when
         CustomerService toTest = new CustomerService(mockCustomerRepository);
@@ -42,7 +42,7 @@ class CustomerServiceTest {
         //given
         CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
         List<Customer> customerList = List.of(new Customer("Company1"), new Customer("Company2"));
-        when(mockCustomerRepository.getAllCustomers()).thenReturn(customerList);
+        when(mockCustomerRepository.findAll()).thenReturn(customerList);
 
         //when
         CustomerService toTest = new CustomerService(mockCustomerRepository);
@@ -69,7 +69,7 @@ class CustomerServiceTest {
     void getCustomerByName_nameDontExist() {
         //given
         CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
-        when(mockCustomerRepository.getCustomerByName(anyString())).thenReturn(Optional.empty());
+        when(mockCustomerRepository.findCustomerByName(anyString())).thenReturn(Optional.empty());
 
         //when
         CustomerService toTest = new CustomerService(mockCustomerRepository);
@@ -89,7 +89,7 @@ class CustomerServiceTest {
         //given
         CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
         Customer customer = new Customer("Company");
-        when(mockCustomerRepository.getCustomerByName("Company")).thenReturn(Optional.of(customer));
+        when(mockCustomerRepository.findCustomerByName("Company")).thenReturn(Optional.of(customer));
 
         //when
         CustomerService toTest = new CustomerService(mockCustomerRepository);
@@ -156,18 +156,19 @@ class CustomerServiceTest {
 
             private Map<String,Customer> mapDB = new HashMap<>();
             @Override
-            public List<Customer> getAllCustomers() {
+            public List<Customer> findAll() {
                 return new ArrayList<>(mapDB.values());
             }
 
             @Override
-            public Optional<Customer> getCustomerByName(String name) {
+            public Optional<Customer> findCustomerByName(String name) {
                 return Optional.ofNullable(mapDB.get(name));
             }
 
             @Override
-            public void addCustomer(Customer customer) {
+            public Customer save(Customer customer) {
                 mapDB.put(customer.getName(), customer);
+                return customer;
             }
         };
     }

@@ -35,7 +35,7 @@ public class ItemService {
         toAdd.setId(null);
         return ResponseEntity
                 .status(200)
-                .body(toAdd);
+                .body(repository.save(toAdd));
 
     }
 }
