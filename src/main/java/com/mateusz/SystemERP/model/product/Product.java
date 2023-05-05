@@ -1,5 +1,6 @@
-package com.mateusz.SystemERP.model;
+package com.mateusz.SystemERP.model.product;
 
+import com.mateusz.SystemERP.model.order.Order;
 import com.mateusz.SystemERP.model.item.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
