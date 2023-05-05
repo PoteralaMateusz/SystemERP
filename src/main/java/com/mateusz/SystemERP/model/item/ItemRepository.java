@@ -1,6 +1,4 @@
-package com.mateusz.SystemERP.repository;
-
-import com.mateusz.SystemERP.entity.Item;
+package com.mateusz.SystemERP.model.item;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
-package com.mateusz.SystemERP.entity;
+package com.mateusz.SystemERP.model;
 
+import com.mateusz.SystemERP.model.customer.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

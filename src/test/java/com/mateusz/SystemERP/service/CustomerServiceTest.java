@@ -1,7 +1,7 @@
 package com.mateusz.SystemERP.service;
 
-import com.mateusz.SystemERP.entity.Customer;
-import com.mateusz.SystemERP.repository.CustomerRepository;
+import com.mateusz.SystemERP.model.customer.Customer;
+import com.mateusz.SystemERP.model.customer.CustomerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;

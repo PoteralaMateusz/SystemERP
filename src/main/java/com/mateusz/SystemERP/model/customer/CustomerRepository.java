@@ -1,6 +1,6 @@
-package com.mateusz.SystemERP.repository;
+package com.mateusz.SystemERP.model.customer;
 
-import com.mateusz.SystemERP.entity.Customer;
+import com.mateusz.SystemERP.model.customer.Customer;
 
 
 import java.util.List;

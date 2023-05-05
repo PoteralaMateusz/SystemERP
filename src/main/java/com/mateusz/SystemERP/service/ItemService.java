@@ -1,13 +1,12 @@
 package com.mateusz.SystemERP.service;
 
-import com.mateusz.SystemERP.entity.Item;
-import com.mateusz.SystemERP.repository.ItemRepository;
+import com.mateusz.SystemERP.model.item.Item;
+import com.mateusz.SystemERP.model.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
