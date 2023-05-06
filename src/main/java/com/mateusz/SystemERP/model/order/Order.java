@@ -31,4 +31,11 @@ public class Order {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "order")
     private List<Product> products;
 
+    public Order(Customer customer, LocalDateTime orderDate, LocalDateTime deadline, LocalDateTime finishDate, BigDecimal price) {
+        this.customer = customer;
+        this.orderDate = orderDate;
+        this.deadline = deadline;
+        this.finishDate = finishDate;
+        this.price = price;
+    }
 }

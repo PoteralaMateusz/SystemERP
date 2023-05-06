@@ -26,4 +26,8 @@ public class Product {
     private List<Item> items;
     private double totalWeight;
 
+    public Product(Order order, double totalWeight) {
+        this.order = order;
+        this.totalWeight = totalWeight;
+    }
 }

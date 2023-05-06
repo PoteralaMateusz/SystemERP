@@ -10,4 +10,5 @@ public interface SqlCustomerRepository extends CustomerRepository, JpaRepository
 
     Optional<Customer> findCustomerByName(String name);
 
+
 }

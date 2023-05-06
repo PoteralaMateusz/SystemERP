@@ -1,7 +1,5 @@
 package com.mateusz.SystemERP.model.customer;
 
-import com.mateusz.SystemERP.model.customer.Customer;
-
 
 import java.util.List;
 import java.util.Optional;
