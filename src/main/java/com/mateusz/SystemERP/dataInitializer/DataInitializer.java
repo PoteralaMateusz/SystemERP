@@ -43,6 +43,7 @@ public class DataInitializer {
                 BigDecimal.valueOf(12500L)
         );
         orderRepository.save(order1);
+        orderRepository.updateCustomerOrderById(1L,"MetalBud");
     }
 
     private void productsInit(){
