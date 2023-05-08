@@ -2,16 +2,14 @@ package com.mateusz.SystemERP.model.customer;
 
 import com.mateusz.SystemERP.model.order.Order;
 import jakarta.persistence.*;
-import lombok.Getter;
+
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Setter
-@Getter
 @Table(name = "customers")
 public class Customer {
 
@@ -22,5 +20,21 @@ public class Customer {
 
     public Customer(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

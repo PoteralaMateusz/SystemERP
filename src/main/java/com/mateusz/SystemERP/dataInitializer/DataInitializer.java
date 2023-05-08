@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +27,6 @@ public class DataInitializer {
     public void initData(){
         customersInit();
         ordersInit();
-        //productsInit();
     }
 
     private void customersInit(){
@@ -43,20 +45,6 @@ public class DataInitializer {
                 BigDecimal.valueOf(12500L)
         );
         orderRepository.addOrderWithCustomerId(order1.getDeadline(),order1.getFinishDate(),order1.getOrderDate(),order1.getPrice(),"MetalBud");
-    }
-
-    private void productsInit(){
-        Product product1 = new Product(
-                orderRepository.findOrderById(1L).get(),
-                250
-        );
-
-        Product product2 = new Product(
-                orderRepository.findOrderById(1L).get(),
-                500
-        );
-        productRepository.save(product1);
-        productRepository.save(product2);
 
     }
 
