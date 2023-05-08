@@ -19,6 +19,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String drawingName;
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
