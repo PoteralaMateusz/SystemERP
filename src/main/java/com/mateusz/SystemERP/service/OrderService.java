@@ -17,6 +17,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
 
+    public ResponseEntity<List<Order>> getAllOrders(){
+        if (orderRepository.findAll().isEmpty()){
+            return ResponseEntity
+                    .status(404)
+                    .build();
+        }
+        return ResponseEntity
+                .status(200)
+                .body(orderRepository.findAll());
+    }
     public ResponseEntity<Order> findOrderById(Long id){
         Optional<Order> result = orderRepository.findOrderById(id);
         if (result.isEmpty()){

@@ -25,6 +25,7 @@ public class ProductService {
                     .build();
         }
         product.setOrder(orderToAddProduct.get());
+        productRepository.save(product);
         return ResponseEntity
                 .status(201)
                 .body(product);

@@ -25,8 +25,7 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO ORDERS (DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) " +
-            "VALUES (:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
+    @Query(value = "INSERT INTO ORDERS (DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) VALUES (:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
     void addOrderWithCustomerId(@Param("deadline") LocalDateTime deadline,
                                   @Param("finishDate") LocalDateTime finishDate,
                                   @Param("orderDate") LocalDateTime orderDate,
