@@ -42,8 +42,7 @@ public class DataInitializer {
                 LocalDateTime.now(),
                 BigDecimal.valueOf(12500L)
         );
-        orderRepository.save(order1);
-        orderRepository.updateCustomerOrderById(1L,"MetalBud");
+        orderRepository.addOrderWithCustomerId(order1.getDeadline(),order1.getFinishDate(),order1.getOrderDate(),order1.getPrice(),"MetalBud");
     }
 
     private void productsInit(){

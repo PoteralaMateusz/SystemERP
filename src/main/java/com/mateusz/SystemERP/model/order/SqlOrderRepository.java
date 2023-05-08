@@ -21,13 +21,13 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
     @Modifying
     @Transactional
     @Query(value = "UPDATE ORDERS SET CUSTOMER_ID = :customerId WHERE ID = :orderId", nativeQuery = true)
-    void updateCustomerOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
+    void addCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
 
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO ORDERS (DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) " +
             "VALUES (:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
-    void saveOrderWithCustomerId(@Param("deadline") LocalDateTime deadline,
+    void addOrderWithCustomerId(@Param("deadline") LocalDateTime deadline,
                                   @Param("finishDate") LocalDateTime finishDate,
                                   @Param("orderDate") LocalDateTime orderDate,
                                   @Param("price") BigDecimal price,
