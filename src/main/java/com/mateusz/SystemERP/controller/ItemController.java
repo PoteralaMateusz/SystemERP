@@ -13,13 +13,18 @@ import java.util.List;
 public class ItemController {
     private final ItemService service;
 
+    @GetMapping("/items")
+    public ResponseEntity<List<Item>> findAllItems(){
+        return service.findAllItems();
+    }
+
     @GetMapping("/items/{id}")
     public ResponseEntity<List<Item>> findItemsByProductId(@PathVariable Long id) {
         return service.findItemsByProductId(id);
     }
 
-    @PostMapping("/items")
-    public ResponseEntity<?> addItem(@RequestBody Item toAdd) {
-        return service.addItem(toAdd);
+    @PostMapping("/items/{productId}")
+    public ResponseEntity<?> addItemWithProductID(@PathVariable Long productId , @RequestBody Item toAdd) {
+        return service.addItemWithProductId(productId, toAdd);
     }
 }
