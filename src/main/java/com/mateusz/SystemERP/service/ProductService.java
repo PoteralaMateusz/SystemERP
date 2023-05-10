@@ -17,23 +17,21 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
 
-    public ResponseEntity<Product> createProductByOrderId(Long orderId , Product product){
-        Optional<Order> orderToAddProduct = orderRepository.findOrderById(orderId);
-        if (orderToAddProduct.isEmpty() || product == null){
-            return ResponseEntity
+    public ResponseEntity<List<Product>> findAllProducts(){
+        List<Product> products = productRepository.findAll();
+        if (products.isEmpty()){
+            ResponseEntity
                     .status(404)
                     .build();
         }
-        product.setOrder(orderToAddProduct.get());
-        productRepository.save(product);
         return ResponseEntity
-                .status(201)
-                .body(product);
+                .status(200)
+                .body(products);
     }
 
-    public ResponseEntity<List<Product>> findProductByOrderId(Long orderId){
+    public ResponseEntity<List<Product>> findProductsByOrderId(Long orderId) {
         Optional<Order> orderToFind = orderRepository.findOrderById(orderId);
-        if (orderToFind.isEmpty()){
+        if (orderToFind.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -42,4 +40,19 @@ public class ProductService {
                 .status(200)
                 .body(productRepository.findProductsByOrderId(orderId));
     }
+
+    public ResponseEntity<Product> createProductWithOrderId(Product toSave, Long orderId) {
+        Optional<Order> orderToAddProduct = orderRepository.findOrderById(orderId);
+        if (orderToAddProduct.isEmpty() || toSave == null) {
+            return ResponseEntity
+                    .status(404)
+                    .build();
+        }
+        toSave.setOrder(orderToAddProduct.get());
+        productRepository.addProductWithOrderId(toSave.getDrawingName(),toSave.getPieces(), toSave.getTotalWeight(), toSave.getOrder().getId());
+        return ResponseEntity
+                .status(201)
+                .body(toSave);
+    }
+
 }
