@@ -4,6 +4,8 @@ import com.mateusz.SystemERP.model.customer.Customer;
 import com.mateusz.SystemERP.model.customer.CustomerRepository;
 import com.mateusz.SystemERP.model.order.Order;
 import com.mateusz.SystemERP.model.order.OrderRepository;
+import com.mateusz.SystemERP.model.product.Product;
+import com.mateusz.SystemERP.model.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,10 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
 
-    public ResponseEntity<List<Order>> getAllOrders(){
-        if (orderRepository.findAll().isEmpty()){
+    public ResponseEntity<List<Order>> getAllOrders() {
+        if (orderRepository.findAll().isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -27,9 +30,10 @@ public class OrderService {
                 .status(200)
                 .body(orderRepository.findAll());
     }
-    public ResponseEntity<Order> findOrderById(Long id){
+
+    public ResponseEntity<Order> findOrderById(Long id) {
         Optional<Order> result = orderRepository.findOrderById(id);
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -39,9 +43,9 @@ public class OrderService {
                 .body(result.get());
     }
 
-    public ResponseEntity<List<Order>> findOrdersByCustomerName(String name){
+    public ResponseEntity<List<Order>> findOrdersByCustomerName(String name) {
         List<Order> result = orderRepository.findOrdersByCustomerName(name);
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -51,29 +55,66 @@ public class OrderService {
                 .body(result);
     }
 
-    public ResponseEntity<?> addCustomerToOrderById(Long orderId, String customerId){
+    public ResponseEntity<?> addCustomerToOrderById(Long orderId, String customerId) {
         Optional<Customer> findCustomer = customerRepository.findCustomerByName(customerId);
         Optional<Order> findOrder = orderRepository.findOrderById(orderId);
-        if (findOrder.isEmpty() || findCustomer.isEmpty()){
+        if (findOrder.isEmpty() || findCustomer.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
         }
-        orderRepository.addCustomerToOrderById(orderId,customerId);
+        orderRepository.addCustomerToOrderById(orderId, customerId);
         return ResponseEntity
                 .status(200)
                 .build();
     }
 
-    public ResponseEntity<?> addOrderWithCustomerId(Order toAdd){
-        if (customerRepository.findCustomerByName(toAdd.getCustomer().getName()).isEmpty()){
+    public ResponseEntity<?> addOrderWithCustomerId(Order toAdd) {
+        if (customerRepository.findCustomerByName(toAdd.getCustomer().getName()).isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
         }
-        orderRepository.addOrderWithCustomerId(toAdd.getDeadline(),
-                toAdd.getFinishDate(),toAdd.getOrderDate(),
-                toAdd.getPrice(),toAdd.getCustomer().getName());
+        orderRepository.addOrderWithCustomerId(
+                toAdd.getOrderNumber(),
+                toAdd.getDeadline(),
+                toAdd.getFinishDate(),
+                toAdd.getOrderDate(),
+                toAdd.getPrice(),
+                toAdd.getCustomer().getName()
+        );
+        return ResponseEntity
+                .status(200)
+                .build();
+    }
+
+    public ResponseEntity<?> addOrderWithCustomerAndProducts(Order toAdd) {
+        if (toAdd == null) {
+            return ResponseEntity
+                    .status(404)
+                    .build();
+        }
+        if (customerRepository.findCustomerByName(toAdd.getCustomer().getName()).isEmpty()) {
+            customerRepository.save(toAdd.getCustomer());
+        }
+        orderRepository.addOrderWithCustomerId(
+                toAdd.getOrderNumber(),
+                toAdd.getDeadline(),
+                toAdd.getFinishDate(),
+                toAdd.getOrderDate(),
+                toAdd.getPrice(),
+                toAdd.getCustomer().getName()
+        );
+        Long orderId = orderRepository.findOrderByOrderNumber(toAdd.getOrderNumber()).get().getId();
+        for (Product productToAdd : toAdd.getProducts()) {
+            productRepository.addProductWithOrderId(
+                    productToAdd.getDrawingName(),
+                    productToAdd.getPieces(),
+                    productToAdd.getTotalWeight(),
+                    orderId
+            );
+        }
+
         return ResponseEntity
                 .status(200)
                 .build();

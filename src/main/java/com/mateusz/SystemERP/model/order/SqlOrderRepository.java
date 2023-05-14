@@ -18,6 +18,8 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
 
     List<Order> findOrdersByCustomerName(String name);
 
+    Optional<Order> findOrderByOrderNumber(String orderNumber);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE ORDERS SET CUSTOMER_ID = :customerId WHERE ID = :orderId", nativeQuery = true)
@@ -25,11 +27,12 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO ORDERS (DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) VALUES (:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
-    void addOrderWithCustomerId(@Param("deadline") LocalDateTime deadline,
-                                  @Param("finishDate") LocalDateTime finishDate,
-                                  @Param("orderDate") LocalDateTime orderDate,
-                                  @Param("price") BigDecimal price,
-                                  @Param("customerId") String customerId);
+    @Query(value = "INSERT INTO ORDERS (ORDER_NUMBER,DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) VALUES (:orderNumber,:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
+    void addOrderWithCustomerId(@Param("orderNumber") String orderNumber,
+                                @Param("deadline") LocalDateTime deadline,
+                                @Param("finishDate") LocalDateTime finishDate,
+                                @Param("orderDate") LocalDateTime orderDate,
+                                @Param("price") BigDecimal price,
+                                @Param("customerId") String customerId);
 
 }
