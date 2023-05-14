@@ -10,7 +10,8 @@ public interface OrderRepository {
     List<Order> findAll();
     Optional<Order> findOrderById(Long id);
     List<Order> findOrdersByCustomerName(String name);
+    Optional<Order> findOrderByOrderNumber(String orderNumber);
     Order save(Order order);
     void addCustomerToOrderById(Long orderId, String customerId);
-    void addOrderWithCustomerId(LocalDateTime deadline, LocalDateTime finishDate, LocalDateTime orderDate, BigDecimal price, String customerId);
+    void addOrderWithCustomerId(String orderNumber, LocalDateTime deadline, LocalDateTime finishDate, LocalDateTime orderDate, BigDecimal price, String customerId);
 }
