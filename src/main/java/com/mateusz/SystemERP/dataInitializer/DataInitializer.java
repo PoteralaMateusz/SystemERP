@@ -39,12 +39,13 @@ public class DataInitializer {
     private void ordersInit(){
         Order order1 = new Order(
                 null,
+                "2023/005",
                 LocalDateTime.now().minusDays(10),
                 LocalDateTime.now().plusDays(36),
                 LocalDateTime.now(),
                 BigDecimal.valueOf(12500L)
         );
-        orderRepository.addOrderWithCustomerId(order1.getDeadline(),order1.getFinishDate(),order1.getOrderDate(),order1.getPrice(),"MetalBud");
+        orderRepository.addOrderWithCustomerId(order1.getOrderNumber(),order1.getDeadline(),order1.getFinishDate(),order1.getOrderDate(),order1.getPrice(),"MetalBud");
 
     }
 
