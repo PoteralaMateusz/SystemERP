@@ -22,6 +22,11 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
 
     @Modifying
     @Transactional
+    @Query(value = "UPDATE ORDERS SET FINISH_DATE = :finishDate WHERE ID = :orderId",nativeQuery = true)
+    void setFinishDateInOrder(@Param("orderId") Long orderId,@Param("finishDate") LocalDateTime finishDate);
+
+    @Modifying
+    @Transactional
     @Query(value = "UPDATE ORDERS SET CUSTOMER_ID = :customerId WHERE ID = :orderId", nativeQuery = true)
     void addCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
 
