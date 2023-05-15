@@ -28,6 +28,11 @@ public class OrderController {
         return orderService.findOrdersByCustomerName(name);
     }
 
+    @GetMapping("/orders/order_number/{orderNumber}")
+    public ResponseEntity<Order> findOrderByOrderNumber(@PathVariable String orderNumber){
+        return orderService.findOrderByOrderNumber(orderNumber);
+    }
+
     @PostMapping("/orders")
     public ResponseEntity<?> addOrderWithCustomerId(@RequestBody Order toAdd){
         return orderService.addOrderWithCustomerId(toAdd);

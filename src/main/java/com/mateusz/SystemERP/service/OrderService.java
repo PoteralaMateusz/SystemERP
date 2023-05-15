@@ -55,6 +55,18 @@ public class OrderService {
                 .body(result);
     }
 
+    public ResponseEntity<Order> findOrderByOrderNumber(String orderNumber){
+        Optional<Order> result = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (result.isEmpty()){
+            return ResponseEntity
+                    .status(404)
+                    .build();
+        }
+        return ResponseEntity
+                .status(200)
+                .body(result.get());
+    }
+
     public ResponseEntity<?> addCustomerToOrderById(Long orderId, String customerId) {
         Optional<Customer> findCustomer = customerRepository.findCustomerByName(customerId);
         Optional<Order> findOrder = orderRepository.findOrderById(orderId);

@@ -39,7 +39,7 @@ public class DataInitializer {
     private void ordersInit(){
         Order order1 = new Order(
                 null,
-                "2023/005",
+                "2023-005",
                 LocalDateTime.now().minusDays(10),
                 LocalDateTime.now().plusDays(36),
                 LocalDateTime.now(),
