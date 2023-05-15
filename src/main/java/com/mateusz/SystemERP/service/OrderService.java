@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,6 +128,19 @@ public class OrderService {
             );
         }
 
+        return ResponseEntity
+                .status(200)
+                .build();
+    }
+
+    public ResponseEntity<?> setFinishDateWhenOrderIsDoneForCurrent(Long orderId){
+        Optional<Order> doneOrderToSetFinishDate = orderRepository.findOrderById(orderId);
+        if (doneOrderToSetFinishDate.isEmpty()){
+            return ResponseEntity
+                    .status(404)
+                    .build();
+        }
+        orderRepository.setFinishDateInOrder(orderId,LocalDateTime.now());
         return ResponseEntity
                 .status(200)
                 .build();

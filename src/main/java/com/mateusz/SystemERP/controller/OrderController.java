@@ -42,4 +42,9 @@ public class OrderController {
     public ResponseEntity<?> addOrderWithCustomerAndProducts(@RequestBody Order toAdd){
         return orderService.addOrderWithCustomerAndProducts(toAdd);
     }
+
+    @PostMapping("/orders/done/{orderId}")
+    public ResponseEntity<?> setFinishDateInOrderForCurrent(@PathVariable Long orderId){
+        return orderService.setFinishDateWhenOrderIsDoneForCurrent(orderId);
+    }
 }
