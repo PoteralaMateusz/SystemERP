@@ -34,8 +34,8 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<?> addOrderWithCustomerId(@RequestBody Order toAdd){
-        return orderService.addOrderWithCustomerId(toAdd);
+    public ResponseEntity<?> addOrderWithCustomer(@RequestBody Order toAdd){
+        return orderService.addOrderWithCustomer(toAdd);
     }
 
     @PostMapping("/orders/full")
