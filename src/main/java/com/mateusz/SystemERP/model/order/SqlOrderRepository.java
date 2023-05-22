@@ -28,7 +28,7 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
     @Modifying
     @Transactional
     @Query(value = "UPDATE ORDERS SET CUSTOMER_ID = :customerId WHERE ID = :orderId", nativeQuery = true)
-    void addCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
+    void updateCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
 
     @Modifying
     @Transactional
