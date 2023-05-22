@@ -68,7 +68,7 @@ public class OrderService {
                 .body(result.get());
     }
 
-    public ResponseEntity<?> addCustomerToOrderById(Long orderId, String customerId) {
+    public ResponseEntity<?> updateCustomerInOrderById(Long orderId, String customerId) {
         Optional<Customer> findCustomer = customerRepository.findCustomerByName(customerId);
         Optional<Order> findOrder = orderRepository.findOrderById(orderId);
         if (findOrder.isEmpty() || findCustomer.isEmpty()) {
@@ -76,18 +76,19 @@ public class OrderService {
                     .status(404)
                     .build();
         }
-        orderRepository.addCustomerToOrderById(orderId, customerId);
+        orderRepository.updateCustomerToOrderById(orderId, customerId);
         return ResponseEntity
                 .status(200)
                 .build();
     }
 
-    public ResponseEntity<?> addOrderWithCustomerId(Order toAdd) {
-        if (customerRepository.findCustomerByName(toAdd.getCustomer().getName()).isEmpty()) {
+    public ResponseEntity<?> addOrderWithCustomer(Order toAdd) {
+        if (toAdd.getCustomer() == null  || toAdd.getCustomer().getName() == null) {
             return ResponseEntity
                     .status(404)
                     .build();
         }
+        findCustomerWhenDontExistSave(toAdd.getCustomer());
         orderRepository.addOrderWithCustomerId(
                 toAdd.getOrderNumber(),
                 toAdd.getDeadline(),
@@ -144,5 +145,10 @@ public class OrderService {
         return ResponseEntity
                 .status(200)
                 .build();
+    }
+
+    private void findCustomerWhenDontExistSave(Customer customer){
+        customerRepository.findCustomerByName(customer.getName())
+                .orElseGet(() -> customerRepository.save(customer));
     }
 }
