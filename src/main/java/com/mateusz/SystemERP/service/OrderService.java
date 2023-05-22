@@ -108,9 +108,8 @@ public class OrderService {
                     .status(404)
                     .build();
         }
-        if (customerRepository.findCustomerByName(toAdd.getCustomer().getName()).isEmpty()) {
-            customerRepository.save(toAdd.getCustomer());
-        }
+        findCustomerWhenDontExistSave(toAdd.getCustomer());
+
         orderRepository.addOrderWithCustomerId(
                 toAdd.getOrderNumber(),
                 toAdd.getDeadline(),
@@ -146,6 +145,24 @@ public class OrderService {
                 .status(200)
                 .build();
     }
+
+    public ResponseEntity<?> deleteOrderByID(Long id){
+        return orderRepository.findOrderById(id)
+                .map(order -> {
+                    orderRepository.deleteById(id);
+                    return ResponseEntity
+                            .status(200)
+                            .build();
+                }).orElseGet(() -> ResponseEntity
+                        .status(404)
+                        .build());
+    }
+
+
+
+
+
+
 
     private void findCustomerWhenDontExistSave(Customer customer){
         customerRepository.findCustomerByName(customer.getName())

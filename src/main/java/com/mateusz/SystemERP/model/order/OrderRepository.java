@@ -14,6 +14,7 @@ public interface OrderRepository {
     List<Order> findOrdersByCustomerName(String name);
     Optional<Order> findOrderByOrderNumber(String orderNumber);
     Order save(Order order);
+    void deleteById(Long id);
     void setFinishDateInOrder(Long orderId, LocalDateTime finishDate);
     void updateCustomerToOrderById(Long orderId, String customerId);
     void addOrderWithCustomerId(String orderNumber, LocalDateTime deadline, LocalDateTime finishDate, LocalDateTime orderDate, BigDecimal price, String customerId);

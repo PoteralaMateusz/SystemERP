@@ -47,4 +47,9 @@ public class OrderController {
     public ResponseEntity<?> setFinishDateInOrderForCurrent(@PathVariable Long orderId){
         return orderService.setFinishDateWhenOrderIsDoneForCurrent(orderId);
     }
+
+    @DeleteMapping("/orders/{id}")
+    public ResponseEntity<?> deleteOrderByID(@PathVariable Long id){
+        return orderService.deleteOrderByID(id);
+    }
 }
