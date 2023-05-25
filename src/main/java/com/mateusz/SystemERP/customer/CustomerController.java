@@ -16,16 +16,22 @@ public class CustomerController {
 
     @GetMapping("/customers")
     public ResponseEntity<List<Customer>> getAllCustomers() {
-        return service.getAllCustomers();
+        return ResponseEntity
+                .status(200)
+                .body(service.getAllCustomers());
     }
 
     @GetMapping("/customers/{name}")
     public ResponseEntity<Customer> getCustomerByName(@PathVariable String name) {
-        return service.getCustomerByName(name);
+        return ResponseEntity
+                .status(200)
+                .body(service.getCustomerByName(name));
     }
 
     @PostMapping("/customers/{name}")
     public ResponseEntity<?> addCustomer(@PathVariable String name) {
-        return service.addCustomer(name);
+        return ResponseEntity
+                .status(200)
+                .body(service.addCustomer(name));
     }
 }
