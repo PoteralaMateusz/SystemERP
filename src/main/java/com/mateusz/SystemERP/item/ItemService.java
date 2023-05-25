@@ -1,11 +1,10 @@
 package com.mateusz.SystemERP.item;
 
-import com.mateusz.SystemERP.item.Item;
-import com.mateusz.SystemERP.item.ItemRepository;
+import com.mateusz.SystemERP.item.exceptions.ItemNotFoundException;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,41 +16,40 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ProductRepository productRepository;
 
-    public ResponseEntity<List<Item>> findAllItems(){
-        List<Item> items = itemRepository.findAll();
-        if (items.isEmpty()){
-            return ResponseEntity
-                    .status(404)
-                    .build();
+    public List<Item> findAllItems() {
+        List<Item> itemsList = itemRepository.findAll();
+        if (itemsList.isEmpty()) {
+            throw new ItemNotFoundException("Items list is empty");
         }
-        return ResponseEntity
-                .status(200)
-                .body(items);
+        return itemsList;
     }
 
-    public ResponseEntity<List<Item>> findItemsByProductId(Long id){
+    public List<Item> findItemsByProductId(Long id) {
         List<Item> itemsByProductId = itemRepository.findItemsByProductId(id);
         if (itemsByProductId.isEmpty()) {
-            return ResponseEntity
-                    .status(404)
-                    .build();
+            throw new ItemNotFoundException("Not found items that have product id: " + id + ".");
         }
-        return ResponseEntity
-                .status(200)
-                .body(itemsByProductId);
+        return itemsByProductId;
     }
 
-    public ResponseEntity<?> addItemWithProductId(Long productId, Item toAdd){
-        Optional<Product> product = productRepository.findProductById(productId);
-        if (product.isEmpty() || toAdd == null){
-            return ResponseEntity
-                    .status(404)
-                    .build();
+    @Transactional
+    public Item addItem(Item toAdd) {
+        Optional<Product> product = productRepository.findProductById(toAdd.getProduct().getId());
+        if (product.isEmpty()) {
+            productRepository.save(toAdd.getProduct());
         }
-        itemRepository.addItemWithProductId(toAdd.getMaterial(),toAdd.getPieces(),toAdd.getQuality(), toAdd.getWeight(), productId);
-        return ResponseEntity
-                .status(200)
-                .build();
+        product.ifPresent(toAdd::setProduct);
+        itemRepository.save(toAdd);
+        return toAdd;
 
+    }
+
+    public Item deleteItemByID(Long id){
+        Optional<Item> itemToDelete = itemRepository.findItemById(id);
+        if (itemToDelete.isEmpty()){
+            throw new ItemNotFoundException("Item with " + id + " id not found.");
+        }
+        itemRepository.deleteById(itemToDelete.get().getId());
+        return itemToDelete.get();
     }
 }
