@@ -11,5 +11,7 @@ public interface ProductRepository {
 
     List<Product> findProductsByOrderId(Long id);
 
+    Product save(Product product);
+
     void addProductWithOrderId(String drawingName, String pieces, double totalWeight, long orderID);
 }
