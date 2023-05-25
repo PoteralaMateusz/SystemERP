@@ -1,4 +1,4 @@
-package com.mateusz.SystemERP.model.customer;
+package com.mateusz.SystemERP.customer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

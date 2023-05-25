@@ -1,6 +1,4 @@
-package com.mateusz.SystemERP.model.item;
-
-import org.springframework.data.repository.query.Param;
+package com.mateusz.SystemERP.item;
 
 import java.util.List;
 

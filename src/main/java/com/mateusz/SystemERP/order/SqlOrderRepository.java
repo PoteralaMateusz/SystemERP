@@ -1,6 +1,5 @@
-package com.mateusz.SystemERP.model.order;
+package com.mateusz.SystemERP.order;
 
-import com.mateusz.SystemERP.model.customer.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

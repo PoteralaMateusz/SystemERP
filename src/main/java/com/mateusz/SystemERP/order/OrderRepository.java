@@ -1,6 +1,4 @@
-package com.mateusz.SystemERP.model.order;
-
-import org.springframework.data.repository.query.Param;
+package com.mateusz.SystemERP.order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

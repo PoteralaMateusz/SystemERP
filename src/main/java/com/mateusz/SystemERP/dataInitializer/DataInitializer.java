@@ -1,20 +1,16 @@
 package com.mateusz.SystemERP.dataInitializer;
 
-import com.mateusz.SystemERP.model.customer.Customer;
-import com.mateusz.SystemERP.model.customer.CustomerRepository;
-import com.mateusz.SystemERP.model.order.Order;
-import com.mateusz.SystemERP.model.order.OrderRepository;
-import com.mateusz.SystemERP.model.product.Product;
-import com.mateusz.SystemERP.model.product.ProductRepository;
+import com.mateusz.SystemERP.customer.Customer;
+import com.mateusz.SystemERP.customer.CustomerRepository;
+import com.mateusz.SystemERP.order.Order;
+import com.mateusz.SystemERP.order.OrderRepository;
+import com.mateusz.SystemERP.product.ProductRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

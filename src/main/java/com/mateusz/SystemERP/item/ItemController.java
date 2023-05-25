@@ -1,7 +1,5 @@
-package com.mateusz.SystemERP.controller;
+package com.mateusz.SystemERP.item;
 
-import com.mateusz.SystemERP.model.item.Item;
-import com.mateusz.SystemERP.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

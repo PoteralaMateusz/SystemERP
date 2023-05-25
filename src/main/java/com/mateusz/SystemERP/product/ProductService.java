@@ -1,9 +1,9 @@
-package com.mateusz.SystemERP.service;
+package com.mateusz.SystemERP.product;
 
-import com.mateusz.SystemERP.model.order.Order;
-import com.mateusz.SystemERP.model.order.OrderRepository;
-import com.mateusz.SystemERP.model.product.Product;
-import com.mateusz.SystemERP.model.product.ProductRepository;
+import com.mateusz.SystemERP.order.Order;
+import com.mateusz.SystemERP.order.OrderRepository;
+import com.mateusz.SystemERP.product.Product;
+import com.mateusz.SystemERP.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

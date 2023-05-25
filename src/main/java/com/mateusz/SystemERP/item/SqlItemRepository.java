@@ -1,6 +1,5 @@
-package com.mateusz.SystemERP.model.item;
+package com.mateusz.SystemERP.item;
 
-import com.mateusz.SystemERP.model.product.Product;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
