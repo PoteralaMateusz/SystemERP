@@ -13,16 +13,29 @@ public class ItemController {
 
     @GetMapping("/items")
     public ResponseEntity<List<Item>> findAllItems(){
-        return service.findAllItems();
+        return ResponseEntity
+                .status(200)
+                .body(service.findAllItems());
     }
 
     @GetMapping("/items/{id}")
     public ResponseEntity<List<Item>> findItemsByProductId(@PathVariable Long id) {
-        return service.findItemsByProductId(id);
+        return ResponseEntity
+                .status(200)
+                .body(service.findItemsByProductId(id));
     }
 
-    @PostMapping("/items/{productId}")
-    public ResponseEntity<?> addItemWithProductID(@PathVariable Long productId , @RequestBody Item toAdd) {
-        return service.addItemWithProductId(productId, toAdd);
+    @PostMapping("/items")
+    public ResponseEntity<Item> addItem( @RequestBody Item toAdd) {
+        return ResponseEntity
+                .status(200)
+                .body(service.addItem(toAdd));
+    }
+
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<Item> deleteItem(@PathVariable Long id){
+        return ResponseEntity
+                .status(200)
+                .body(service.deleteItemByID(id));
     }
 }
