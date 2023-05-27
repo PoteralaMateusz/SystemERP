@@ -23,6 +23,7 @@ public class Product {
     @JoinColumn(name = "order_id")
     private Order order;
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "product")
+    @Transient
     private List<Item> items;
 
 
@@ -55,7 +56,7 @@ public class Product {
         this.order = order;
     }
 
-    private List<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -78,4 +79,6 @@ public class Product {
     public void setPieces(String pieces) {
         this.pieces = pieces;
     }
+
+
 }
