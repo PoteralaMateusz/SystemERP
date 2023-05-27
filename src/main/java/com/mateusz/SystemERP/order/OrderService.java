@@ -2,10 +2,11 @@ package com.mateusz.SystemERP.order;
 
 import com.mateusz.SystemERP.customer.Customer;
 import com.mateusz.SystemERP.customer.CustomerRepository;
-import com.mateusz.SystemERP.order.Order;
-import com.mateusz.SystemERP.order.OrderRepository;
+import com.mateusz.SystemERP.item.Item;
+import com.mateusz.SystemERP.item.ItemRepository;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final ItemRepository itemRepository;
 
     public ResponseEntity<List<Order>> getAllOrders() {
         if (orderRepository.findAll().isEmpty()) {
@@ -56,9 +58,9 @@ public class OrderService {
                 .body(result);
     }
 
-    public ResponseEntity<Order> findOrderByOrderNumber(String orderNumber){
+    public ResponseEntity<Order> findOrderByOrderNumber(String orderNumber) {
         Optional<Order> result = orderRepository.findOrderByOrderNumber(orderNumber);
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -83,7 +85,7 @@ public class OrderService {
     }
 
     public ResponseEntity<?> addOrderWithCustomer(Order toAdd) {
-        if (toAdd.getCustomer() == null  || toAdd.getCustomer().getName() == null) {
+        if (toAdd.getCustomer() == null || toAdd.getCustomer().getName() == null) {
             return ResponseEntity
                     .status(404)
                     .build();
@@ -133,20 +135,20 @@ public class OrderService {
                 .build();
     }
 
-    public ResponseEntity<?> setFinishDateWhenOrderIsDoneForCurrent(Long orderId){
+    public ResponseEntity<?> setFinishDateWhenOrderIsDoneForCurrent(Long orderId) {
         Optional<Order> doneOrderToSetFinishDate = orderRepository.findOrderById(orderId);
-        if (doneOrderToSetFinishDate.isEmpty()){
+        if (doneOrderToSetFinishDate.isEmpty()) {
             return ResponseEntity
                     .status(404)
                     .build();
         }
-        orderRepository.setFinishDateInOrder(orderId,LocalDateTime.now());
+        orderRepository.setFinishDateInOrder(orderId, LocalDateTime.now());
         return ResponseEntity
                 .status(200)
                 .build();
     }
 
-    public ResponseEntity<?> deleteOrderByID(Long id){
+    public ResponseEntity<?> deleteOrderByID(Long id) {
         return orderRepository.findOrderById(id)
                 .map(order -> {
                     orderRepository.deleteById(id);
@@ -158,13 +160,30 @@ public class OrderService {
                         .build());
     }
 
+    @Transactional
+    public void saveAll(Order toSave) {
+        Optional<Customer> customer = customerRepository.findCustomerByName(toSave.getCustomer().getName());
+        if (customer.isEmpty()) {
+            customerRepository.save(toSave.getCustomer());
+        }
+        customer.ifPresent(toSave::setCustomer);
+        orderRepository.save(toSave);
+
+        List<Product> productsToSave = toSave.getProducts();
+        for (Product product : productsToSave) {
+            product.setOrder(toSave);
+            productRepository.save(product);
+
+            List<Item> itemsToSave = product.getItems();
+            for (Item item : itemsToSave) {
+                item.setProduct(product);
+                itemRepository.save(item);
+            }
+        }
+    }
 
 
-
-
-
-
-    private void findCustomerWhenDontExistSave(Customer customer){
+    private void findCustomerWhenDontExistSave(Customer customer) {
         customerRepository.findCustomerByName(customer.getName())
                 .orElseGet(() -> customerRepository.save(customer));
     }
