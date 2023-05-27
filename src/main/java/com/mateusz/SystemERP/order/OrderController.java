@@ -31,16 +31,6 @@ public class OrderController {
         return orderService.findOrderByOrderNumber(orderNumber);
     }
 
-    @PostMapping("/orders")
-    public ResponseEntity<?> addOrderWithCustomer(@RequestBody Order toAdd){
-        return orderService.addOrderWithCustomer(toAdd);
-    }
-
-    @PostMapping("/orders/full")
-    public ResponseEntity<?> addOrderWithCustomerAndProducts(@RequestBody Order toAdd){
-        return orderService.addOrderWithCustomerAndProducts(toAdd);
-    }
-
     @PostMapping("/orders/done/{orderId}")
     public ResponseEntity<?> setFinishDateInOrderForCurrent(@PathVariable Long orderId){
         return orderService.setFinishDateWhenOrderIsDoneForCurrent(orderId);
@@ -49,5 +39,11 @@ public class OrderController {
     @DeleteMapping("/orders/{id}")
     public ResponseEntity<?> deleteOrderByID(@PathVariable Long id){
         return orderService.deleteOrderByID(id);
+    }
+
+    @PostMapping("/orders")
+    public ResponseEntity<?> addOrder(@RequestBody Order toAdd){
+        orderService.saveAll(toAdd);
+        return ResponseEntity.ok().build();
     }
 }
