@@ -2,15 +2,14 @@ package com.mateusz.SystemERP.item;
 
 import com.mateusz.SystemERP.product.Product;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
-@NoArgsConstructor
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "items")
 public class Item {
 
@@ -25,11 +24,4 @@ public class Item {
     private int pieces;
     private double weight;
 
-    public Item(Product product, String material, String quality, int pieces, double weight) {
-        this.product = product;
-        this.material = material;
-        this.quality = quality;
-        this.pieces = pieces;
-        this.weight = weight;
-    }
 }
