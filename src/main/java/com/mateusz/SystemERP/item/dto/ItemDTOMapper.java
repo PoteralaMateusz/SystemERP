@@ -2,6 +2,7 @@ package com.mateusz.SystemERP.item.dto;
 
 import com.mateusz.SystemERP.item.Item;
 import com.mateusz.SystemERP.item.ItemRepository;
+import com.mateusz.SystemERP.item.exceptions.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,9 @@ public class ItemDTOMapper {
     public Item map(ItemDTO itemDTO){
         return new Item(
                 itemDTO.id(),
-                itemRepository.findItemById(itemDTO.id()).get().getProduct(),
+                itemRepository.findItemById(itemDTO.id())
+                        .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemDTO.id() + " does not exist."))
+                        .getProduct(),
                 itemDTO.material(),
                 itemDTO.quality(),
                 itemDTO.pieces(),
