@@ -3,13 +3,18 @@ package com.mateusz.SystemERP.product;
 import com.mateusz.SystemERP.order.Order;
 import com.mateusz.SystemERP.item.Item;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Setter
+@Getter
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
 
@@ -31,54 +36,4 @@ public class Product {
         this.order = order;
         this.totalWeight = totalWeight;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    private void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDrawingName() {
-        return drawingName;
-    }
-
-    public void setDrawingName(String drawingName) {
-        this.drawingName = drawingName;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public double getTotalWeight() {
-        return totalWeight;
-    }
-
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public String getPieces() {
-        return pieces;
-    }
-
-    public void setPieces(String pieces) {
-        this.pieces = pieces;
-    }
-
-
 }
