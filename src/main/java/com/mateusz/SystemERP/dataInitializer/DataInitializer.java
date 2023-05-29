@@ -26,8 +26,8 @@ public class DataInitializer {
     }
 
     private void customersInit(){
-        Customer customer1 = new Customer("MetalBud");
-        Customer customer2 = new Customer("BridgeBuild");
+        Customer customer1 = new Customer("MetalBud","Poland","Warszawa","Mickiewicza",14,12345,null);
+        Customer customer2 = new Customer("BridgeBuilding","England","London","Main",123,12345,null);
         customerRepository.save(customer1);
         customerRepository.save(customer2);
     }
