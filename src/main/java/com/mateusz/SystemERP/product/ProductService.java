@@ -1,58 +1,58 @@
 package com.mateusz.SystemERP.product;
 
-import com.mateusz.SystemERP.order.Order;
 import com.mateusz.SystemERP.order.OrderRepository;
-import com.mateusz.SystemERP.product.Product;
-import com.mateusz.SystemERP.product.ProductRepository;
+import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
+import com.mateusz.SystemERP.product.dta.ProductDTO;
+import com.mateusz.SystemERP.product.dta.ProductDTOMapper;
+import com.mateusz.SystemERP.product.exceptions.ProductNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final ProductDTOMapper productDTOMapper;
 
-    public ResponseEntity<List<Product>> findAllProducts(){
+    public List<ProductDTO> findAllProducts() {
         List<Product> products = productRepository.findAll();
-        if (products.isEmpty()){
-            ResponseEntity
-                    .status(404)
-                    .build();
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("Product list is empty.");
         }
-        return ResponseEntity
-                .status(200)
-                .body(products);
+        return products
+                .stream()
+                .map(productDTOMapper::map)
+                .collect(Collectors.toList());
+
+
     }
 
-    public ResponseEntity<List<Product>> findProductsByOrderId(Long orderId) {
-        Optional<Order> orderToFind = orderRepository.findOrderById(orderId);
-        if (orderToFind.isEmpty()) {
-            return ResponseEntity
-                    .status(404)
-                    .build();
+    public List<ProductDTO> findProductsByOrderId(Long orderId) {
+        if (orderRepository.findOrderById(orderId).isEmpty()){
+            throw new OrderNotFoundException("Order with id " + orderId + " does not exist.");
         }
-        return ResponseEntity
-                .status(200)
-                .body(productRepository.findProductsByOrderId(orderId));
+        List<Product> productsByOrderId = productRepository.findProductsByOrderId(orderId);
+        if (productsByOrderId.isEmpty()) {
+            throw new ProductNotFoundException("Products with orderID " + orderId + " does not exist.");
+        }
+        return productsByOrderId
+                .stream()
+                .map(productDTOMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public ResponseEntity<Product> createProductWithOrderId(Product toSave, Long orderId) {
-        Optional<Order> orderToAddProduct = orderRepository.findOrderById(orderId);
-        if (orderToAddProduct.isEmpty() || toSave == null) {
-            return ResponseEntity
-                    .status(404)
-                    .build();
+    @Transactional
+    public ProductDTO createOrUpdateProductWithOrderId(ProductDTO toSave) {
+        if (orderRepository.findOrderById(toSave.orderId()).isEmpty()){
+            throw new OrderNotFoundException("Order with id " + toSave.orderId() + " does not exist.");
         }
-        toSave.setOrder(orderToAddProduct.get());
-        productRepository.addProductWithOrderId(toSave.getDrawingName(),toSave.getPieces(), toSave.getTotalWeight(), toSave.getOrder().getId());
-        return ResponseEntity
-                .status(201)
-                .body(toSave);
+
+        return productDTOMapper.map(productRepository.save(productDTOMapper.map(toSave)));
     }
 
 }
