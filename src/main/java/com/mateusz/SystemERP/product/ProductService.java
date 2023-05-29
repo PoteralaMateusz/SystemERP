@@ -55,4 +55,14 @@ public class ProductService {
         return productDTOMapper.map(productRepository.save(productDTOMapper.map(toSave)));
     }
 
+    public ProductDTO deleteProductById(Long productId){
+        return productRepository.findProductById(productId)
+                .map(product -> {
+                    productRepository.deleteById(product.getId());
+                    return productDTOMapper.map(product);
+                })
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Products with orderID " + productId + " does not exist."));
+    }
+
 }
