@@ -16,20 +16,31 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> findAllProducts() {
         return ResponseEntity
                 .status(200)
-                .body(productService.findAllProducts());
+                .body(productService
+                        .findAllProducts());
     }
 
     @GetMapping("/products/{orderId}")
     public ResponseEntity<List<ProductDTO>> findProductByOrderId(@PathVariable Long orderId) {
         return ResponseEntity
                 .status(200)
-                .body(productService.findProductsByOrderId(orderId));
+                .body(productService
+                        .findProductsByOrderId(orderId));
     }
 
     @PostMapping("/products/{orderId}")
     public ResponseEntity<ProductDTO> createProductByOrderId(@RequestBody ProductDTO toUpdate) {
         return ResponseEntity
                 .status(200)
-                .body(productService.createOrUpdateProductWithOrderId(toUpdate));
+                .body(productService
+                        .createOrUpdateProductWithOrderId(toUpdate));
+    }
+
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<ProductDTO> deleteProductById(@PathVariable Long productId) {
+        return ResponseEntity
+                .status(200)
+                .body(productService
+                        .deleteProductById(productId));
     }
 }
