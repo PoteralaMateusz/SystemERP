@@ -13,5 +13,7 @@ public interface ProductRepository {
 
     Product save(Product product);
 
+    void deleteById(Long id);
+
     void addProductWithOrderId(String drawingName, String pieces, double totalWeight, long orderID);
 }
