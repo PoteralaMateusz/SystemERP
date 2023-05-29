@@ -1,11 +1,9 @@
 package com.mateusz.SystemERP.customer;
 
+import com.mateusz.SystemERP.customer.dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,23 +13,23 @@ public class CustomerController {
     private final CustomerService service;
 
     @GetMapping("/customers")
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         return ResponseEntity
                 .status(200)
                 .body(service.getAllCustomers());
     }
 
     @GetMapping("/customers/{name}")
-    public ResponseEntity<Customer> getCustomerByName(@PathVariable String name) {
+    public ResponseEntity<CustomerDTO> getCustomerByName(@PathVariable String name) {
         return ResponseEntity
                 .status(200)
                 .body(service.getCustomerByName(name));
     }
 
-    @PostMapping("/customers/{name}")
-    public ResponseEntity<?> addCustomer(@PathVariable String name) {
+    @PostMapping("/customers")
+    public ResponseEntity<CustomerDTO> addOrUpdateCustomer(@RequestBody CustomerDTO toSave) {
         return ResponseEntity
                 .status(200)
-                .body(service.addCustomer(name));
+                .body(service.addOrUpdateCustomer(toSave));
     }
 }
