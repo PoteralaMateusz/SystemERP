@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.product;
 
+import com.mateusz.SystemERP.product.dta.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +10,26 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService service;
+    private final ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> findAllProducts(){
-        return service.findAllProducts();
+    public ResponseEntity<List<ProductDTO>> findAllProducts() {
+        return ResponseEntity
+                .status(200)
+                .body(productService.findAllProducts());
     }
 
     @GetMapping("/products/{orderId}")
-    public ResponseEntity<List<Product>> findProductByOrderId(@PathVariable Long orderId){
-        return service.findProductsByOrderId(orderId);
+    public ResponseEntity<List<ProductDTO>> findProductByOrderId(@PathVariable Long orderId) {
+        return ResponseEntity
+                .status(200)
+                .body(productService.findProductsByOrderId(orderId));
     }
 
     @PostMapping("/products/{orderId}")
-    public ResponseEntity<Product> createProductByOrderId(@PathVariable Long orderId , @RequestBody Product product){
-        return service.createProductWithOrderId(product, orderId);
+    public ResponseEntity<ProductDTO> createProductByOrderId(@RequestBody ProductDTO toUpdate) {
+        return ResponseEntity
+                .status(200)
+                .body(productService.createOrUpdateProductWithOrderId(toUpdate));
     }
 }
