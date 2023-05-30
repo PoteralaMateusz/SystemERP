@@ -12,4 +12,6 @@ public interface CustomerRepository {
     Optional<Customer> findCustomerByName(String name);
 
     Customer save(Customer customer);
+
+    void deleteById(String name);
 }
