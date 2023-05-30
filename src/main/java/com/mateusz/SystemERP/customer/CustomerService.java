@@ -2,7 +2,6 @@ package com.mateusz.SystemERP.customer;
 
 import com.mateusz.SystemERP.customer.dto.CustomerDTO;
 import com.mateusz.SystemERP.customer.dto.CustomerDTOMapper;
-import com.mateusz.SystemERP.customer.exceptions.CustomerExistException;
 import com.mateusz.SystemERP.customer.exceptions.CustomerNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
-    private final CustomerRepository repository;
+    private final CustomerRepository customerRepository;
     private final CustomerDTOMapper customerDTOMapper;
 
     public List<CustomerDTO> getAllCustomers() {
-        List<Customer> customerList = repository.findAll();
+        List<Customer> customerList = customerRepository.findAll();
         if (customerList.isEmpty()) {
             throw new CustomerNotFoundException("Customers list is empty.");
         }
@@ -29,7 +28,7 @@ public class CustomerService {
     }
 
     public CustomerDTO getCustomerByName(String name) {
-        return repository
+        return customerRepository
                 .findCustomerByName(name)
                 .map(customerDTOMapper::map)
                 .orElseThrow(() ->
@@ -41,7 +40,17 @@ public class CustomerService {
         if (toSave == null){
             throw new CustomerNotFoundException("Customer data is null.");
         }
-        return customerDTOMapper.map(repository.save(customerDTOMapper.map(toSave)));
+        return customerDTOMapper.map(customerRepository.save(customerDTOMapper.map(toSave)));
+    }
+
+    public CustomerDTO deleteById(String name){
+        return customerRepository.findCustomerByName(name)
+                .map(customer -> {
+                    customerRepository.deleteById(customer.getName());
+                    return customerDTOMapper.map(customer);
+                })
+                .orElseThrow(() ->
+                        new CustomerNotFoundException("Customer with name " + name + " does not exist"));
     }
 
 
