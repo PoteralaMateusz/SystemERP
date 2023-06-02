@@ -1,5 +1,7 @@
 package com.mateusz.SystemERP.order;
 
+import com.mateusz.SystemERP.order.dto.OrderAddDTO;
+import com.mateusz.SystemERP.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,38 +14,51 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders(){
-        return orderService.getAllOrders();
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.getAllOrders());
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id){
-        return orderService.findOrderById(id);
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.findOrderById(id));
     }
 
     @GetMapping("/orders/customer/{name}")
-    public ResponseEntity<List<Order>> findOrdersByCustomerName(@PathVariable String name){
-        return orderService.findOrdersByCustomerName(name);
+    public ResponseEntity<List<OrderDTO>> findOrdersByCustomerName(@PathVariable String name) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.findOrdersByCustomerName(name));
     }
 
     @GetMapping("/orders/order_number/{orderNumber}")
-    public ResponseEntity<Order> findOrderByOrderNumber(@PathVariable String orderNumber){
-        return orderService.findOrderByOrderNumber(orderNumber);
+    public ResponseEntity<OrderDTO> findOrderByOrderNumber(@PathVariable String orderNumber) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.findOrderByOrderNumber(orderNumber));
     }
 
     @PostMapping("/orders/done/{orderId}")
-    public ResponseEntity<?> setFinishDateInOrderForCurrent(@PathVariable Long orderId){
-        return orderService.setFinishDateWhenOrderIsDoneForCurrent(orderId);
+    public ResponseEntity<OrderDTO> setFinishDateInOrderForCurrent(@PathVariable Long orderId) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.setFinishDateWhenOrderIsDoneForCurrent(orderId));
     }
 
-    @DeleteMapping("/orders/{id}")
-    public ResponseEntity<?> deleteOrderByID(@PathVariable Long id){
-        return orderService.deleteOrderByID(id);
+    @DeleteMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDTO> deleteOrderByID(@PathVariable Long orderId) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.deleteOrderByID(orderId));
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<?> addOrder(@RequestBody Order toAdd){
-        orderService.saveAll(toAdd);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderAddDTO orderAddDTO) {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.saveAll(orderAddDTO));
     }
 }
