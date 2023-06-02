@@ -26,7 +26,7 @@ public class ProductService {
         }
         return products
                 .stream()
-                .map(productDTOMapper::map)
+                .map(productDTOMapper::mapProductDTO)
                 .collect(Collectors.toList());
 
 
@@ -42,7 +42,7 @@ public class ProductService {
         }
         return productsByOrderId
                 .stream()
-                .map(productDTOMapper::map)
+                .map(productDTOMapper::mapProductDTO)
                 .collect(Collectors.toList());
     }
 
@@ -52,14 +52,14 @@ public class ProductService {
             throw new OrderNotFoundException("Order with id " + toSave.orderId() + " does not exist.");
         }
 
-        return productDTOMapper.map(productRepository.save(productDTOMapper.map(toSave)));
+        return productDTOMapper.mapProductDTO(productRepository.save(productDTOMapper.mapProductDTO(toSave)));
     }
 
     public ProductDTO deleteProductById(Long productId){
         return productRepository.findProductById(productId)
                 .map(product -> {
                     productRepository.deleteById(product.getId());
-                    return productDTOMapper.map(product);
+                    return productDTOMapper.mapProductDTO(product);
                 })
                 .orElseThrow(() ->
                         new ProductNotFoundException("Products with orderID " + productId + " does not exist."));
