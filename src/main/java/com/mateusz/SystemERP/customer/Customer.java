@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mateusz.SystemERP.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,8 @@ public class Customer {
     private String street;
     private int houseNumber;
     private int zipCode;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
-    @Transient
     private List<Order> orders;
 
 }

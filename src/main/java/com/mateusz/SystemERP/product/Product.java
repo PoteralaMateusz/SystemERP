@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mateusz.SystemERP.order.Order;
 import com.mateusz.SystemERP.item.Item;
 import jakarta.persistence.*;
@@ -27,8 +28,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "product")
-    @Transient
     private List<Item> items;
 
 
