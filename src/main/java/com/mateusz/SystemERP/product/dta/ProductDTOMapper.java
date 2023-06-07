@@ -1,6 +1,7 @@
 package com.mateusz.SystemERP.product.dta;
 
 import com.mateusz.SystemERP.item.ItemRepository;
+import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.order.OrderRepository;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import com.mateusz.SystemERP.product.Product;
@@ -8,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductDTOMapper {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
+    private final ItemDTOMapper itemDTOMapper;
 
     public Product mapProductDTO(ProductDTO productDTO) {
         return new Product(
@@ -24,7 +27,10 @@ public class ProductDTOMapper {
                 orderRepository.findOrderById(productDTO.orderId())
                         .orElseThrow(() ->
                                 new OrderNotFoundException("Order with id " + productDTO.orderId() + " does not exist.")),
-                itemRepository.findItemsByProductId(productDTO.id())
+                productDTO.items()
+                        .stream()
+                        .map(itemDTOMapper::map)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -34,7 +40,11 @@ public class ProductDTOMapper {
                 product.getDrawingName(),
                 product.getPieces(),
                 product.getTotalWeight(),
-                product.getOrder().getId()
+                product.getOrder().getId(),
+                product.getItems()
+                        .stream()
+                        .map(itemDTOMapper::map)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -45,7 +55,10 @@ public class ProductDTOMapper {
                 productAddDTO.pieces(),
                 productAddDTO.totalWeight(),
                 null,
-                new ArrayList<>()
+                productAddDTO.items()
+                        .stream()
+                        .map(itemDTOMapper::map)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -54,7 +67,11 @@ public class ProductDTOMapper {
                 product.getId(),
                 product.getDrawingName(),
                 product.getPieces(),
-                product.getTotalWeight()
+                product.getTotalWeight(),
+                product.getItems()
+                        .stream()
+                        .map(itemDTOMapper::map)
+                        .collect(Collectors.toList())
         );
     }
 }

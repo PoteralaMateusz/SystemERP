@@ -26,7 +26,7 @@ public class ItemDTOMapper {
     public Item map(ItemDTO itemDTO) {
         return new Item(
                 itemDTO.id(),
-                productRepository.findProductById(itemDTO.productId())
+                itemDTO.id() == null ? null : productRepository.findProductById(itemDTO.productId())
                         .orElseThrow(() ->
                                 new ProductNotFoundException("Product with id " + itemDTO.id() + " does not exist")),
                 itemDTO.material(),
