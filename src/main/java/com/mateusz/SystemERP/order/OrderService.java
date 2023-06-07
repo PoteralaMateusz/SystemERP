@@ -6,7 +6,6 @@ import com.mateusz.SystemERP.customer.dto.CustomerDTOMapper;
 import com.mateusz.SystemERP.customer.exceptions.CustomerNotFoundException;
 import com.mateusz.SystemERP.item.Item;
 import com.mateusz.SystemERP.item.ItemRepository;
-import com.mateusz.SystemERP.item.dto.ItemDTO;
 import com.mateusz.SystemERP.order.dto.OrderAddDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTOMapper;
@@ -128,6 +127,6 @@ public class OrderService {
             }
         }
 
-        return orderDTOMapper.mapOrderDTO(addedOrder);
+        return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(orderToSave.getId()).get());
     }
 }

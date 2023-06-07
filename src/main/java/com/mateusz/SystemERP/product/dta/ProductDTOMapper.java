@@ -8,7 +8,6 @@ import com.mateusz.SystemERP.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class ProductDTOMapper {
         );
     }
 
-    public ProductDTO mapProductDTO(Product product){
+    public ProductDTO mapProductDTO(Product product) {
         return new ProductDTO(
                 product.getId(),
                 product.getDrawingName(),
@@ -50,27 +49,26 @@ public class ProductDTOMapper {
 
     public Product mapProductAddDTO(ProductAddDTO productAddDTO) {
         return new Product(
-                productAddDTO.id(),
+                null,
                 productAddDTO.drawingName(),
                 productAddDTO.pieces(),
                 productAddDTO.totalWeight(),
                 null,
                 productAddDTO.items()
                         .stream()
-                        .map(itemDTOMapper::map)
+                        .map(itemDTOMapper::mapAddDTO)
                         .collect(Collectors.toList())
         );
     }
 
-    public ProductAddDTO mapProductAddDTO(Product product){
+    public ProductAddDTO mapProductAddDTO(Product product) {
         return new ProductAddDTO(
-                product.getId(),
                 product.getDrawingName(),
                 product.getPieces(),
                 product.getTotalWeight(),
                 product.getItems()
                         .stream()
-                        .map(itemDTOMapper::map)
+                        .map(itemDTOMapper::mapAddDTO)
                         .collect(Collectors.toList())
         );
     }

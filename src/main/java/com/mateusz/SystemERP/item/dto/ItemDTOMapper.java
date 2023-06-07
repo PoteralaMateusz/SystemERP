@@ -26,13 +26,33 @@ public class ItemDTOMapper {
     public Item map(ItemDTO itemDTO) {
         return new Item(
                 itemDTO.id(),
-                itemDTO.id() == null ? null : productRepository.findProductById(itemDTO.productId())
+                productRepository.findProductById(itemDTO.productId())
                         .orElseThrow(() ->
                                 new ProductNotFoundException("Product with id " + itemDTO.id() + " does not exist")),
                 itemDTO.material(),
                 itemDTO.quality(),
                 itemDTO.pieces(),
                 itemDTO.weight()
+        );
+    }
+
+    public Item mapAddDTO(ItemAddDTO itemAddDTO) {
+        return new Item(
+                null,
+                null,
+                itemAddDTO.material(),
+                itemAddDTO.quality(),
+                itemAddDTO.pieces(),
+                itemAddDTO.weight()
+        );
+    }
+
+    public ItemAddDTO mapAddDTO(Item item) {
+        return new ItemAddDTO(
+                item.getMaterial(),
+                item.getQuality(),
+                item.getPieces(),
+                item.getWeight()
         );
     }
 }
