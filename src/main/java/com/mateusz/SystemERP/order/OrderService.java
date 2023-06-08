@@ -17,7 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +82,7 @@ public class OrderService {
 
         return orderRepository.findOrderById(orderId)
                 .map(order -> {
-                    orderRepository.setFinishDateInOrder(orderId, LocalDateTime.now());
+                    orderRepository.setFinishDateInOrder(orderId, LocalDate.now());
                     return orderDTOMapper.mapOrderDTO(order);
                 }).orElseThrow(() ->
                         new OrderNotFoundException("Order with id " + orderId + "does not exist"));

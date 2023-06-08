@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +21,8 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE ORDERS SET FINISH_DATE = :finishDate WHERE ID = :orderId",nativeQuery = true)
-    void setFinishDateInOrder(@Param("orderId") Long orderId,@Param("finishDate") LocalDateTime finishDate);
+    @Query(value = "UPDATE ORDERS SET FINISH_DATE = :finishDate WHERE ID = :orderId", nativeQuery = true)
+    void setFinishDateInOrder(@Param("orderId") Long orderId, @Param("finishDate") LocalDate finishDate);
 
     @Modifying
     @Transactional
@@ -33,9 +33,9 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
     @Transactional
     @Query(value = "INSERT INTO ORDERS (ORDER_NUMBER,DEADLINE,FINISH_DATE,ORDER_DATE,PRICE,CUSTOMER_ID) VALUES (:orderNumber,:deadline,:finishDate,:orderDate,:price,:customerId)", nativeQuery = true)
     void addOrderWithCustomerId(@Param("orderNumber") String orderNumber,
-                                @Param("deadline") LocalDateTime deadline,
-                                @Param("finishDate") LocalDateTime finishDate,
-                                @Param("orderDate") LocalDateTime orderDate,
+                                @Param("deadline") LocalDate deadline,
+                                @Param("finishDate") LocalDate finishDate,
+                                @Param("orderDate") LocalDate orderDate,
                                 @Param("price") BigDecimal price,
                                 @Param("customerId") String customerId);
 

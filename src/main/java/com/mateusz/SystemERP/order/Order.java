@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -28,9 +28,9 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
     private String orderNumber;
-    private LocalDateTime orderDate;
-    private LocalDateTime deadline;
-    private LocalDateTime finishDate;
+    private LocalDate orderDate;
+    private LocalDate deadline;
+    private LocalDate finishDate;
     private BigDecimal price;
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
