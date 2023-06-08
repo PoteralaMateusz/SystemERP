@@ -1,6 +1,8 @@
 package com.mateusz.SystemERP.order.dto;
 
+import com.mateusz.SystemERP.customer.CustomerRepository;
 import com.mateusz.SystemERP.customer.dto.CustomerDTOMapper;
+import com.mateusz.SystemERP.customer.exceptions.CustomerNotFoundException;
 import com.mateusz.SystemERP.order.Order;
 import com.mateusz.SystemERP.product.dta.ProductDTOMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderDTOMapper {
+    private final CustomerRepository customerRepository;
     private final CustomerDTOMapper customerDTOMapper;
     private final ProductDTOMapper productDTOMapper;
 
@@ -49,7 +52,9 @@ public class OrderDTOMapper {
     public Order mapOrderAddDTO(OrderAddDTO orderAddDTO){
         return new Order(
                 null,
-                customerDTOMapper.map(orderAddDTO.customer()),
+                customerRepository.findCustomerByName(orderAddDTO.customerName())
+                        .orElseThrow(() ->
+                                new CustomerNotFoundException("Customer with id " + orderAddDTO.customerName() + " does not exit")),
                 orderAddDTO.orderNumber(),
                 orderAddDTO.orderDate(),
                 orderAddDTO.deadline(),
@@ -64,7 +69,7 @@ public class OrderDTOMapper {
 
     public OrderAddDTO mapOrderAddDTO(Order order){
         return new OrderAddDTO(
-                customerDTOMapper.map(order.getCustomer()),
+                order.getCustomer().getName(),
                 order.getOrderNumber(),
                 order.getOrderDate(),
                 order.getDeadline(),

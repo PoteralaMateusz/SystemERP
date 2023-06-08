@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record OrderAddDTO(
-        CustomerDTO customer,
+        String customerName,
         String orderNumber,
         LocalDate orderDate,
         LocalDate deadline,

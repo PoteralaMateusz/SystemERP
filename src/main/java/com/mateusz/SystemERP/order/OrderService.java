@@ -101,7 +101,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO saveAll(OrderAddDTO orderAddDTO) {
-        Customer customerToSave = customerDTOMapper.map(orderAddDTO.customer());
+        Customer customerToSave = orderDTOMapper.mapOrderAddDTO(orderAddDTO).getCustomer();
         List<Product> productsToSave = orderAddDTO.products()
                 .stream()
                 .map(productDTOMapper::mapProductAddDTO)
@@ -109,11 +109,7 @@ public class OrderService {
         Order orderToSave = orderDTOMapper.mapOrderAddDTO(orderAddDTO);
         orderToSave.setProducts(new ArrayList<>());
 
-        Customer addedCustomer = customerRepository.findCustomerByName(customerToSave.getName())
-                .orElseGet(() ->
-                        customerRepository.save(customerToSave)
-                );
-        orderToSave.setCustomer(addedCustomer);
+        orderToSave.setCustomer(customerToSave);
         Order addedOrder = orderRepository.save(orderToSave);
 
         for (Product productToSave : productsToSave) {
