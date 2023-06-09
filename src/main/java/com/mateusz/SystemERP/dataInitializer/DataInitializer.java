@@ -27,8 +27,8 @@ public class DataInitializer {
     }
 
     private void customersInit() {
-        Customer customer1 = new Customer("MetalBud", "Poland", "Warszawa", "Mickiewicza", 14, 12345, null);
-        Customer customer2 = new Customer("BridgeBuilding", "England", "London", "Main", 123, 12345, null);
+        Customer customer1 = new Customer(null,"MetalBud", "Poland", "Warszawa", "Mickiewicza", 14, 12345, null);
+        Customer customer2 = new Customer(null,"BridgeBuilding", "England", "London", "Main", 123, 12345, null);
         customerRepository.save(customer1);
         customerRepository.save(customer2);
     }
@@ -44,7 +44,7 @@ public class DataInitializer {
                 BigDecimal.valueOf(12500L),
                 new ArrayList<>()
         );
-        orderRepository.addOrderWithCustomerId(order1.getOrderNumber(), order1.getDeadline(), order1.getFinishDate(), order1.getOrderDate(), order1.getPrice(), "MetalBud");
+        orderRepository.addOrderWithCustomerId(order1.getOrderNumber(), order1.getDeadline(), order1.getFinishDate(), order1.getOrderDate(), order1.getPrice(), 1L);
 
     }
 
