@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.customer;
 
+import com.mateusz.SystemERP.customer.dto.CustomerAddDTO;
 import com.mateusz.SystemERP.customer.dto.CustomerDTO;
 import com.mateusz.SystemERP.customer.dto.CustomerDTOMapper;
 import com.mateusz.SystemERP.customer.exceptions.CustomerNotFoundException;
@@ -23,34 +24,37 @@ public class CustomerService {
         }
         return customerList
                 .stream()
-                .map(customerDTOMapper::map)
+                .filter(customer -> !customer.isDeleted())
+                .map(customerDTOMapper::mapCustomerDTO)
                 .collect(Collectors.toList());
     }
 
     public CustomerDTO getCustomerByName(String name) {
         return customerRepository
                 .findCustomerByName(name)
-                .map(customerDTOMapper::map)
+                .filter(customer -> !customer.isDeleted())
+                .map(customerDTOMapper::mapCustomerDTO)
                 .orElseThrow(() ->
                         new CustomerNotFoundException("Customer with name " + name + " does not exist"));
     }
 
     @Transactional
-    public CustomerDTO addOrUpdateCustomer(CustomerDTO toSave) {
+    public CustomerAddDTO addOrUpdateCustomer(CustomerAddDTO toSave) {
         if (toSave == null){
             throw new CustomerNotFoundException("Customer data is null.");
         }
-        return customerDTOMapper.map(customerRepository.save(customerDTOMapper.map(toSave)));
+        return customerDTOMapper.mapCustomerAddDTO(customerRepository.save(customerDTOMapper.mapCustomerAddDTO(toSave)));
     }
 
-    public CustomerDTO deleteById(String name){
-        return customerRepository.findCustomerByName(name)
+    @Transactional
+    public CustomerDTO deleteById(Long customerId){
+        return customerRepository.findCustomerById(customerId)
                 .map(customer -> {
-                    customerRepository.deleteById(customer.getName());
-                    return customerDTOMapper.map(customer);
+                    customerRepository.deleteById(customer.getId());
+                    return customerDTOMapper.mapCustomerDTO(customer);
                 })
                 .orElseThrow(() ->
-                        new CustomerNotFoundException("Customer with name " + name + " does not exist"));
+                        new CustomerNotFoundException("Customer with id " + customerId + " does not exist"));
     }
 
 

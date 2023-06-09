@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.customer;
 
+import com.mateusz.SystemERP.customer.dto.CustomerAddDTO;
 import com.mateusz.SystemERP.customer.dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,16 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<CustomerDTO> addOrUpdateCustomer(@RequestBody CustomerDTO toSave) {
+    public ResponseEntity<CustomerAddDTO> addOrUpdateCustomer(@RequestBody CustomerAddDTO toSave) {
         return ResponseEntity
                 .status(200)
                 .body(customerService.addOrUpdateCustomer(toSave));
     }
 
-    @DeleteMapping("/customers/{name}")
-    public ResponseEntity<CustomerDTO> deleteById(@PathVariable String name){
+    @DeleteMapping("/customers/{customerId}")
+    public ResponseEntity<CustomerDTO> deleteById(@PathVariable Long customerId){
         return ResponseEntity
                 .status(200)
-                .body(customerService.deleteById(name));
+                .body(customerService.deleteById(customerId));
     }
 }
