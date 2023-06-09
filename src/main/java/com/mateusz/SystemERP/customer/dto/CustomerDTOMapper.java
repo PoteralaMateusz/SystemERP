@@ -10,8 +10,32 @@ import org.springframework.stereotype.Service;
 public class CustomerDTOMapper {
     private final CustomerRepository customerRepository;
 
-    public Customer map(CustomerDTO customerDTO){
+    public Customer mapCustomerAddDTO(CustomerAddDTO customerAddDTO){
         return new Customer(
+                customerAddDTO.name(),
+                customerAddDTO.country(),
+                customerAddDTO.city(),
+                customerAddDTO.street(),
+                customerAddDTO.houseNumber(),
+                customerAddDTO.zipCode(),
+                null
+        );
+    }
+
+    public CustomerAddDTO mapCustomerAddDTO(Customer customer){
+        return new CustomerAddDTO(
+                customer.getName(),
+                customer.getCountry(),
+                customer.getCity(),
+                customer.getStreet(),
+                customer.getHouseNumber(),
+                customer.getZipCode()
+        );
+    }
+
+    public Customer mapCustomerDTO(CustomerDTO customerDTO){
+        return new Customer(
+                customerDTO.customerId(),
                 customerDTO.name(),
                 customerDTO.country(),
                 customerDTO.city(),
@@ -22,8 +46,9 @@ public class CustomerDTOMapper {
         );
     }
 
-    public CustomerDTO map(Customer customer){
+    public CustomerDTO mapCustomerDTO(Customer customer){
         return new CustomerDTO(
+                customer.getId(),
                 customer.getName(),
                 customer.getCountry(),
                 customer.getCity(),
