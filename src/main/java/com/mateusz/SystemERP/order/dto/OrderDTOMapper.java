@@ -20,7 +20,7 @@ public class OrderDTOMapper {
     public Order mapOrderDTO(OrderDTO orderDTO){
         return new Order(
                 orderDTO.id(),
-                customerDTOMapper.map(orderDTO.customer()),
+                customerDTOMapper.mapCustomerDTO(orderDTO.customer()),
                 orderDTO.orderNumber(),
                 orderDTO.orderDate(),
                 orderDTO.deadline(),
@@ -36,7 +36,7 @@ public class OrderDTOMapper {
     public OrderDTO mapOrderDTO(Order order){
         return new OrderDTO(
                 order.getId(),
-                customerDTOMapper.map(order.getCustomer()),
+                customerDTOMapper.mapCustomerDTO(order.getCustomer()),
                 order.getOrderNumber(),
                 order.getOrderDate(),
                 order.getDeadline(),
@@ -52,9 +52,10 @@ public class OrderDTOMapper {
     public Order mapOrderAddDTO(OrderAddDTO orderAddDTO){
         return new Order(
                 null,
-                customerRepository.findCustomerByName(orderAddDTO.customerName())
+                customerRepository.findCustomerById(orderAddDTO.customerId())
+                        .filter(customer -> !customer.isDeleted())
                         .orElseThrow(() ->
-                                new CustomerNotFoundException("Customer with id " + orderAddDTO.customerName() + " does not exit")),
+                                new CustomerNotFoundException("Customer with id " + orderAddDTO.customerId() + " does not exit")),
                 orderAddDTO.orderNumber(),
                 orderAddDTO.orderDate(),
                 orderAddDTO.deadline(),
@@ -69,7 +70,7 @@ public class OrderDTOMapper {
 
     public OrderAddDTO mapOrderAddDTO(Order order){
         return new OrderAddDTO(
-                order.getCustomer().getName(),
+                order.getCustomer().getId(),
                 order.getOrderNumber(),
                 order.getOrderDate(),
                 order.getDeadline(),

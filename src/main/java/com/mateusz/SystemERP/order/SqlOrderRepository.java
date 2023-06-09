@@ -27,7 +27,7 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
     @Modifying
     @Transactional
     @Query(value = "UPDATE ORDERS SET CUSTOMER_ID = :customerId WHERE ID = :orderId", nativeQuery = true)
-    void updateCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") String customerId);
+    void updateCustomerToOrderById(@Param("orderId") Long orderId, @Param("customerId") Long customerId);
 
     @Modifying
     @Transactional
@@ -37,6 +37,6 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
                                 @Param("finishDate") LocalDate finishDate,
                                 @Param("orderDate") LocalDate orderDate,
                                 @Param("price") BigDecimal price,
-                                @Param("customerId") String customerId);
+                                @Param("customerId") Long customerId);
 
 }

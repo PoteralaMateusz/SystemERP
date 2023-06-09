@@ -22,7 +22,7 @@ public interface OrderRepository {
 
     void setFinishDateInOrder(Long orderId, LocalDate finishDate);
 
-    void updateCustomerToOrderById(Long orderId, String customerId);
+    void updateCustomerToOrderById(Long orderId, Long customerId);
 
-    void addOrderWithCustomerId(String orderNumber, LocalDate deadline, LocalDate finishDate, LocalDate orderDate, BigDecimal price, String customerId);
+    void addOrderWithCustomerId(String orderNumber, LocalDate deadline, LocalDate finishDate, LocalDate orderDate, BigDecimal price, Long customerId);
 }
