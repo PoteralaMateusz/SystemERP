@@ -9,6 +9,7 @@ import com.mateusz.SystemERP.item.ItemRepository;
 import com.mateusz.SystemERP.order.dto.OrderAddDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTOMapper;
+import com.mateusz.SystemERP.order.dto.OrderUpdateDTO;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
@@ -125,5 +126,35 @@ public class OrderService {
         }
 
         return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(orderToSave.getId()).get());
+    }
+
+    @Transactional
+    public OrderDTO updateOrder(Long orderId, OrderUpdateDTO orderUpdateDTO) {
+        return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(orderId)
+                .map(order -> {
+                    customerRepository.findCustomerById(orderUpdateDTO.customerId())
+                            .map(customer -> {
+                                order.setCustomer(customer);
+                                return customer;
+                            })
+                            .orElseThrow(() ->
+                                    new CustomerNotFoundException("Customer with id " + orderUpdateDTO.customerId() +" does not exist"));
+                    if (orderUpdateDTO.orderNumber() != null){
+                        order.setOrderNumber(orderUpdateDTO.orderNumber());
+                    }
+                    if (orderUpdateDTO.deadline() != null){
+                        order.setDeadline(orderUpdateDTO.deadline());
+                    }
+                    if (orderUpdateDTO.finishDate() != null){
+                        order.setFinishDate(orderUpdateDTO.finishDate());
+                    }
+                    if (orderUpdateDTO.price() != null){
+                        order.setPrice(orderUpdateDTO.price());
+                    }
+                    return orderRepository.save(order);
+                })
+                .orElseThrow(() ->
+                        new OrderNotFoundException("Order with id " + orderId + " does not exist")));
+
     }
 }

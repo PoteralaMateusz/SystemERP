@@ -2,6 +2,7 @@ package com.mateusz.SystemERP.order;
 
 import com.mateusz.SystemERP.order.dto.OrderAddDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTO;
+import com.mateusz.SystemERP.order.dto.OrderUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,4 +62,13 @@ public class OrderController {
                 .status(200)
                 .body(orderService.saveAll(orderAddDTO));
     }
+
+    @PatchMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long orderId, @RequestBody OrderUpdateDTO orderUpdateDTO){
+        return ResponseEntity
+                .status(200)
+                .body(orderService.updateOrder(orderId,orderUpdateDTO));
+    }
+
+
 }
