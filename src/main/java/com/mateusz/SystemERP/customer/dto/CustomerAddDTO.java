@@ -5,7 +5,7 @@ public record CustomerAddDTO(
         String country,
         String city,
         String street,
-        int houseNumber,
-        int zipCode
+        Integer houseNumber,
+        Integer zipCode
 ) {
 }

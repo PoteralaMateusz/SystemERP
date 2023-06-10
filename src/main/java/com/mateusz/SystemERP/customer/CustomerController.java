@@ -28,10 +28,17 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<CustomerAddDTO> addOrUpdateCustomer(@RequestBody CustomerAddDTO toSave) {
+    public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerAddDTO toSave) {
         return ResponseEntity
                 .status(200)
-                .body(customerService.addOrUpdateCustomer(toSave));
+                .body(customerService.addCustomer(toSave));
+    }
+
+    @PatchMapping("/customers/{customerID}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long customerID, @RequestBody CustomerAddDTO toUpdate){
+        return ResponseEntity
+                .status(200)
+                .body(customerService.updateCustomer(customerID,toUpdate));
     }
 
     @DeleteMapping("/customers/{customerId}")

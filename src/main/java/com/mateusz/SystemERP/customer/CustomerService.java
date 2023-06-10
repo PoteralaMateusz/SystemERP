@@ -39,11 +39,38 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerAddDTO addOrUpdateCustomer(CustomerAddDTO toSave) {
+    public CustomerDTO addCustomer(CustomerAddDTO toSave) {
         if (toSave == null){
             throw new CustomerNotFoundException("Customer data is null.");
         }
-        return customerDTOMapper.mapCustomerAddDTO(customerRepository.save(customerDTOMapper.mapCustomerAddDTO(toSave)));
+        return customerDTOMapper.mapCustomerDTO(customerRepository.save(customerDTOMapper.mapCustomerAddDTO(toSave)));
+    }
+
+    @Transactional
+    public CustomerDTO updateCustomer(Long customerId, CustomerAddDTO customerAddDTO){
+        return customerDTOMapper.mapCustomerDTO(customerRepository.findCustomerById(customerId)
+                .map(customer -> {
+                    if (customerAddDTO.name() != null){
+                        customer.setName(customerAddDTO.name());
+                    }
+                    if (customerAddDTO.country() != null){
+                        customer.setCountry(customerAddDTO.country());
+                    }
+                    if (customerAddDTO.city() != null){
+                        customer.setCity(customerAddDTO.city());
+                    }
+                    if (customerAddDTO.street() != null){
+                        customer.setStreet(customerAddDTO.street());
+                    }
+                    if (customerAddDTO.houseNumber() != null){
+                        customer.setHouseNumber(customerAddDTO.houseNumber());
+                    }
+                    if (customerAddDTO.zipCode() != null){
+                        customer.setZipCode(customerAddDTO.zipCode());
+                    }
+                    return customerRepository.save(customer);
+                }).orElseThrow(() ->
+                        new CustomerNotFoundException("Customer with id" + customerId + " does not exist")));
     }
 
     @Transactional
