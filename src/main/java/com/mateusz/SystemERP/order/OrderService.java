@@ -46,7 +46,7 @@ public class OrderService {
         return orderRepository.findOrderById(orderId)
                 .map(orderDTOMapper::mapOrderDTO)
                 .orElseThrow(() ->
-                        new OrderNotFoundException("Order with id " + orderId + "does not exist"));
+                        new OrderNotFoundException(orderId));
     }
 
     public List<OrderDTO> findOrdersByCustomerName(String name) {
@@ -73,10 +73,10 @@ public class OrderService {
                                 return customer;
                             })
                             .orElseThrow(() ->
-                                    new CustomerNotFoundException("Customer with id " + customerId + "does not exist"));
+                                    new CustomerNotFoundException(customerId));
                     return orderDTOMapper.mapOrderDTO(order);
                 }).orElseThrow(() ->
-                        new OrderNotFoundException("Order with id " + orderId + "does not exist"));
+                        new OrderNotFoundException(orderId));
 
     }
 
@@ -87,7 +87,7 @@ public class OrderService {
                     orderRepository.setFinishDateInOrder(orderId, LocalDate.now());
                     return orderDTOMapper.mapOrderDTO(order);
                 }).orElseThrow(() ->
-                        new OrderNotFoundException("Order with id " + orderId + "does not exist"));
+                        new OrderNotFoundException(orderId));
 
     }
 
@@ -98,7 +98,7 @@ public class OrderService {
                     return orderDTOMapper.mapOrderDTO(order);
                 })
                 .orElseThrow(() ->
-                        new OrderNotFoundException("Order with id " + orderId + "does not exist"));
+                        new OrderNotFoundException(orderId));
     }
 
     @Transactional
@@ -138,7 +138,7 @@ public class OrderService {
                                 return customer;
                             })
                             .orElseThrow(() ->
-                                    new CustomerNotFoundException("Customer with id " + orderUpdateDTO.customerId() +" does not exist"));
+                                    new CustomerNotFoundException(orderUpdateDTO.customerId()));
                     if (orderUpdateDTO.orderNumber() != null){
                         order.setOrderNumber(orderUpdateDTO.orderNumber());
                     }
@@ -154,7 +154,7 @@ public class OrderService {
                     return orderRepository.save(order);
                 })
                 .orElseThrow(() ->
-                        new OrderNotFoundException("Order with id " + orderId + " does not exist")));
+                        new OrderNotFoundException(orderId)));
 
     }
 }

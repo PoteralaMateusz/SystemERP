@@ -47,7 +47,7 @@ public class ItemService {
     public ItemDTO addItem(ItemDTO itemDTOtoAdd) {
         Optional<Product> product = productRepository.findProductById(itemDTOtoAdd.productId());
         if (product.isEmpty()) {
-            throw new ProductNotFoundException("Product with id " + itemDTOtoAdd.productId() + " does not exist.");
+            throw new ProductNotFoundException(itemDTOtoAdd.productId());
         }
         Item itemToAdd = itemDTOMapper.map(itemDTOtoAdd);
         itemToAdd.setProduct(product.get());
@@ -56,10 +56,10 @@ public class ItemService {
 
     }
 
-    public ItemDTO deleteItemByID(Long id) {
-        Optional<Item> itemToDelete = itemRepository.findItemById(id);
+    public ItemDTO deleteItemByID(Long itemId) {
+        Optional<Item> itemToDelete = itemRepository.findItemById(itemId);
         if (itemToDelete.isEmpty()) {
-            throw new ItemNotFoundException("Item with " + id + " id not found.");
+            throw new ItemNotFoundException(itemId);
         }
         itemRepository.deleteById(itemToDelete.get().getId());
         return itemDTOMapper.map(itemToDelete.get());

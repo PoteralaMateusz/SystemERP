@@ -34,7 +34,7 @@ public class ProductService {
 
     public List<ProductDTO> findProductsByOrderId(Long orderId) {
         if (orderRepository.findOrderById(orderId).isEmpty()){
-            throw new OrderNotFoundException("Order with id " + orderId + " does not exist.");
+            throw new OrderNotFoundException(orderId);
         }
         List<Product> productsByOrderId = productRepository.findProductsByOrderId(orderId);
         if (productsByOrderId.isEmpty()) {
@@ -49,7 +49,7 @@ public class ProductService {
     @Transactional
     public ProductDTO createOrUpdateProductWithOrderId(ProductDTO toSave) {
         if (orderRepository.findOrderById(toSave.orderId()).isEmpty()){
-            throw new OrderNotFoundException("Order with id " + toSave.orderId() + " does not exist.");
+            throw new OrderNotFoundException(toSave.orderId());
         }
 
         return productDTOMapper.mapProductDTO(productRepository.save(productDTOMapper.mapProductDTO(toSave)));

@@ -70,7 +70,7 @@ public class CustomerService {
                     }
                     return customerRepository.save(customer);
                 }).orElseThrow(() ->
-                        new CustomerNotFoundException("Customer with id" + customerId + " does not exist")));
+                        new CustomerNotFoundException(customerId)));
     }
 
     @Transactional
@@ -81,7 +81,7 @@ public class CustomerService {
                     return customerDTOMapper.mapCustomerDTO(customer);
                 })
                 .orElseThrow(() ->
-                        new CustomerNotFoundException("Customer with id " + customerId + " does not exist"));
+                        new CustomerNotFoundException(customerId));
     }
 
 

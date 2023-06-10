@@ -28,7 +28,7 @@ public class ItemDTOMapper {
                 itemDTO.id(),
                 productRepository.findProductById(itemDTO.productId())
                         .orElseThrow(() ->
-                                new ProductNotFoundException("Product with id " + itemDTO.id() + " does not exist")),
+                                new ProductNotFoundException(itemDTO.productId())),
                 itemDTO.material(),
                 itemDTO.quality(),
                 itemDTO.pieces(),

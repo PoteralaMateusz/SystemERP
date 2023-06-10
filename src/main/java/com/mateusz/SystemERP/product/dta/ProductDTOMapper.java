@@ -25,7 +25,7 @@ public class ProductDTOMapper {
                 productDTO.totalWeight(),
                 orderRepository.findOrderById(productDTO.orderId())
                         .orElseThrow(() ->
-                                new OrderNotFoundException("Order with id " + productDTO.orderId() + " does not exist.")),
+                                new OrderNotFoundException(productDTO.orderId())),
                 productDTO.items()
                         .stream()
                         .map(itemDTOMapper::map)
