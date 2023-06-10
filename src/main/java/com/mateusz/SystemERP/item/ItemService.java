@@ -3,6 +3,7 @@ package com.mateusz.SystemERP.item;
 import com.mateusz.SystemERP.item.dto.ItemAddDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
+import com.mateusz.SystemERP.item.dto.ItemUpdateDTO;
 import com.mateusz.SystemERP.item.exceptions.ItemNotFoundException;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.mateusz.SystemERP.calculations.WeightCalculation.calculateProductTotalWeight;
 
 @Service
 @RequiredArgsConstructor
@@ -45,45 +48,60 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDTO addItem(ItemDTO itemDTOtoAdd) {
-        Optional<Product> product = productRepository.findProductById(itemDTOtoAdd.productId());
+    public ItemDTO addItem(ItemAddDTO itemAddDTO) {
+        Optional<Product> product = productRepository.findProductById(itemAddDTO.productId());
         if (product.isEmpty()) {
-            throw new ProductNotFoundException(itemDTOtoAdd.productId());
+            throw new ProductNotFoundException(itemAddDTO.productId());
         }
-        Item itemToAdd = itemDTOMapper.map(itemDTOtoAdd);
+        Item itemToAdd = itemDTOMapper.mapAddDTO(itemAddDTO);
         itemToAdd.setProduct(product.get());
         itemRepository.save(itemToAdd);
+        product.ifPresent(productWeightUpdate ->
+                productWeightUpdate.setTotalWeight(calculateProductTotalWeight(productWeightUpdate)));
         return itemDTOMapper.map(itemToAdd);
 
     }
 
     @Transactional
-    public ItemDTO updateItem(Long itemId, ItemAddDTO itemAddDTO){
-        return itemDTOMapper.map(itemRepository.findItemById(itemId)
+    public ItemDTO updateItem(Long itemId, ItemUpdateDTO itemUpdateDTO) {
+        Item itemToUpdate = itemRepository.findItemById(itemId)
                 .map(item -> {
-                    if (itemAddDTO.material() != null){
-                        item.setMaterial(itemAddDTO.material());
+                    if (itemUpdateDTO.material() != null) {
+                        item.setMaterial(itemUpdateDTO.material());
                     }
-                    if (itemAddDTO.quality() != null){
-                        item.setQuality(itemAddDTO.quality());
+                    if (itemUpdateDTO.quality() != null) {
+                        item.setQuality(itemUpdateDTO.quality());
                     }
-                    if (itemAddDTO.pieces() != null){
-                        item.setPieces(itemAddDTO.pieces());
+                    if (itemUpdateDTO.pieces() != null) {
+                        item.setPieces(itemUpdateDTO.pieces());
                     }
-                    if (itemAddDTO.weight() != null){
-                        item.setWeight(itemAddDTO.weight());
+                    if (itemUpdateDTO.weight() != null) {
+                        item.setWeight(itemUpdateDTO.weight());
                     }
                     return itemRepository.save(item);
                 }).orElseThrow(() ->
-                        new ItemNotFoundException(itemId)));
+                        new ItemNotFoundException(itemId));
+        itemToUpdate.getProduct().setTotalWeight(
+                calculateProductTotalWeight(itemToUpdate.getProduct())
+        );
+
+        return itemDTOMapper.map(itemToUpdate);
     }
 
     public ItemDTO deleteItemByID(Long itemId) {
-        Optional<Item> itemToDelete = itemRepository.findItemById(itemId);
-        if (itemToDelete.isEmpty()) {
-            throw new ItemNotFoundException(itemId);
-        }
-        itemRepository.deleteById(itemToDelete.get().getId());
-        return itemDTOMapper.map(itemToDelete.get());
+        Item itemToDelete = itemRepository.findItemById(itemId)
+                .map(item -> {
+                    itemRepository.deleteById(itemId);
+                    productRepository.findProductById(item.getProduct().getId())
+                            .map(product -> {
+                                product.setTotalWeight(calculateProductTotalWeight(product));
+                                return productRepository.save(product);
+                            }).orElseThrow(() ->
+                                    new ProductNotFoundException(item.getProduct().getId()));
+                    return item;
+                }).orElseThrow(() ->
+                        new ItemNotFoundException(itemId));
+
+        return itemDTOMapper.map(itemToDelete);
     }
 }

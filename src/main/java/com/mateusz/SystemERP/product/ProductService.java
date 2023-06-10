@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mateusz.SystemERP.calculations.WeightCalculation.*;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -68,6 +70,7 @@ public class ProductService {
             itemRepository.save(item);
             savedProduct.getItems().add(item);
         }
+        savedProduct.setTotalWeight(calculateProductTotalWeight(savedProduct));
 
         return productDTOMapper.mapProductDTO(productRepository.findProductById(savedProduct.getId()).get());
     }
@@ -81,9 +84,6 @@ public class ProductService {
                     }
                     if (productUpdateDTO.pieces() != null){
                         product.setPieces(productUpdateDTO.pieces());
-                    }
-                    if (productUpdateDTO.totalWeight() != null){
-                        product.setTotalWeight(productUpdateDTO.totalWeight());
                     }
                     return productDTOMapper.mapProductDTO(productRepository.save(product));
                 }).orElseThrow(() ->

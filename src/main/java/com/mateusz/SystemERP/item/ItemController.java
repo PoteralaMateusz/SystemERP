@@ -2,6 +2,7 @@ package com.mateusz.SystemERP.item;
 
 import com.mateusz.SystemERP.item.dto.ItemAddDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTO;
+import com.mateusz.SystemERP.item.dto.ItemUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +30,14 @@ public class ItemController {
     }
 
     @PostMapping("/items")
-    public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO toAdd) {
+    public ResponseEntity<ItemDTO> addItem(@RequestBody ItemAddDTO toAdd) {
         return ResponseEntity
                 .status(200)
                 .body(itemService.addItem(toAdd));
     }
 
     @PatchMapping("/items/{itemId}")
-    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemAddDTO toUpdate){
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemUpdateDTO toUpdate){
         return ResponseEntity
                 .status(200)
                 .body(itemService.updateItem(itemId,toUpdate));
