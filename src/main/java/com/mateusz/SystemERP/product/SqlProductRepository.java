@@ -22,8 +22,8 @@ public interface SqlProductRepository extends ProductRepository, JpaRepository<P
     @Query(value = "INSERT INTO PRODUCTS (DRAWING_NAME,PIECES,TOTAL_WEIGHT,ORDER_ID)" +
             "VALUES (:drawingName,:pieces,:totalWeight,:orderID)", nativeQuery = true)
     void addProductWithOrderId(@Param("drawingName") String drawingName,
-                               @Param("pieces") String pieces,
-                               @Param("totalWeight") double totalWeight,
-                               @Param("orderID") long orderID);
+                               @Param("pieces") Integer pieces,
+                               @Param("totalWeight") Double totalWeight,
+                               @Param("orderID") Long orderID);
 
 }

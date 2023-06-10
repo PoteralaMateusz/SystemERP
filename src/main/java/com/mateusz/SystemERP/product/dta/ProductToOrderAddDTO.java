@@ -6,7 +6,7 @@ import java.util.List;
 
 public record ProductToOrderAddDTO(
         String drawingName,
-        String pieces,
+        Integer pieces,
         Double totalWeight,
         List<ItemAddDTO> items
 ) {

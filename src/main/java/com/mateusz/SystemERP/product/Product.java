@@ -23,7 +23,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String drawingName;
-    private String pieces;
+    private Integer pieces;
     private Double totalWeight;
     @ManyToOne
     @JoinColumn(name = "order_id")

@@ -8,6 +8,7 @@ import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import com.mateusz.SystemERP.product.dta.ProductAddDTO;
 import com.mateusz.SystemERP.product.dta.ProductDTO;
 import com.mateusz.SystemERP.product.dta.ProductDTOMapper;
+import com.mateusz.SystemERP.product.dta.ProductUpdateDTO;
 import com.mateusz.SystemERP.product.exceptions.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +70,24 @@ public class ProductService {
         }
 
         return productDTOMapper.mapProductDTO(productRepository.findProductById(savedProduct.getId()).get());
+    }
+
+    @Transactional
+    public ProductDTO updateProduct(Long productId, ProductUpdateDTO productUpdateDTO){
+        return productRepository.findProductById(productId)
+                .map(product -> {
+                    if (productUpdateDTO.drawingName() != null){
+                        product.setDrawingName(productUpdateDTO.drawingName());
+                    }
+                    if (productUpdateDTO.pieces() != null){
+                        product.setPieces(productUpdateDTO.pieces());
+                    }
+                    if (productUpdateDTO.totalWeight() != null){
+                        product.setTotalWeight(productUpdateDTO.totalWeight());
+                    }
+                    return productDTOMapper.mapProductDTO(productRepository.save(product));
+                }).orElseThrow(() ->
+                        new ProductNotFoundException(productId));
     }
 
     public ProductDTO deleteProductById(Long productId) {

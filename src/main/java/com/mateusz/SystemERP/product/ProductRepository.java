@@ -15,5 +15,5 @@ public interface ProductRepository {
 
     void deleteById(Long id);
 
-    void addProductWithOrderId(String drawingName, String pieces, double totalWeight, long orderID);
+    void addProductWithOrderId(String drawingName, Integer pieces, Double totalWeight, Long orderID);
 }
