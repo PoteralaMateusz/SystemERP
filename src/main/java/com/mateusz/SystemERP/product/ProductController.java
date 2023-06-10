@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.product;
 
+import com.mateusz.SystemERP.product.dta.ProductAddDTO;
 import com.mateusz.SystemERP.product.dta.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,12 @@ public class ProductController {
                         .findProductsByOrderId(orderId));
     }
 
-    @PostMapping("/products/{orderId}")
-    public ResponseEntity<ProductDTO> createProductByOrderId(@RequestBody ProductDTO toUpdate) {
+    @PostMapping("/products")
+    public ResponseEntity<ProductDTO> createProductByOrderId(@RequestBody ProductAddDTO toUpdate) {
         return ResponseEntity
                 .status(200)
                 .body(productService
-                        .createOrUpdateProductWithOrderId(toUpdate));
+                        .createProduct(toUpdate));
     }
 
     @DeleteMapping("/products/{productId}")

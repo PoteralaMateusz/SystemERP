@@ -1,7 +1,11 @@
 package com.mateusz.SystemERP.product;
 
+import com.mateusz.SystemERP.item.Item;
+import com.mateusz.SystemERP.item.ItemRepository;
+import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.order.OrderRepository;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
+import com.mateusz.SystemERP.product.dta.ProductAddDTO;
 import com.mateusz.SystemERP.product.dta.ProductDTO;
 import com.mateusz.SystemERP.product.dta.ProductDTOMapper;
 import com.mateusz.SystemERP.product.exceptions.ProductNotFoundException;
@@ -17,7 +21,10 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
+
     private final ProductDTOMapper productDTOMapper;
+    private final ItemDTOMapper itemDTOMapper;
 
     public List<ProductDTO> findAllProducts() {
         List<Product> products = productRepository.findAll();
@@ -33,7 +40,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> findProductsByOrderId(Long orderId) {
-        if (orderRepository.findOrderById(orderId).isEmpty()){
+        if (orderRepository.findOrderById(orderId).isEmpty()) {
             throw new OrderNotFoundException(orderId);
         }
         List<Product> productsByOrderId = productRepository.findProductsByOrderId(orderId);
@@ -47,15 +54,24 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO createOrUpdateProductWithOrderId(ProductDTO toSave) {
-        if (orderRepository.findOrderById(toSave.orderId()).isEmpty()){
-            throw new OrderNotFoundException(toSave.orderId());
+    public ProductDTO createProduct(ProductAddDTO toSave) {
+        List<Item> itemsToSave = toSave.items()
+                .stream()
+                .map(itemDTOMapper::mapAddDTO)
+                .toList();
+        toSave.items().clear();
+        Product savedProduct = productRepository.save(productDTOMapper.mapProductAddDTO(toSave));
+
+        for (Item item : itemsToSave) {
+            item.setProduct(savedProduct);
+            itemRepository.save(item);
+            savedProduct.getItems().add(item);
         }
 
-        return productDTOMapper.mapProductDTO(productRepository.save(productDTOMapper.mapProductDTO(toSave)));
+        return productDTOMapper.mapProductDTO(productRepository.findProductById(savedProduct.getId()).get());
     }
 
-    public ProductDTO deleteProductById(Long productId){
+    public ProductDTO deleteProductById(Long productId) {
         return productRepository.findProductById(productId)
                 .map(product -> {
                     productRepository.deleteById(product.getId());
