@@ -106,7 +106,7 @@ public class OrderService {
         Customer customerToSave = orderDTOMapper.mapOrderAddDTO(orderAddDTO).getCustomer();
         List<Product> productsToSave = orderAddDTO.products()
                 .stream()
-                .map(productDTOMapper::mapProductAddDTO)
+                .map(productDTOMapper::mapProductToOrderAddDTO)
                 .toList();
         Order orderToSave = orderDTOMapper.mapOrderAddDTO(orderAddDTO);
         orderToSave.setProducts(new ArrayList<>());
@@ -119,13 +119,15 @@ public class OrderService {
             productToSave.setItems(new ArrayList<>());
             productToSave.setOrder(addedOrder);
             productRepository.save(productToSave);
+            addedOrder.getProducts().add(productToSave);
             for (Item item : itemsToSave) {
                 item.setProduct(productToSave);
                 itemRepository.save(item);
+                productToSave.getItems().add(item);
             }
         }
 
-        return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(orderToSave.getId()).get());
+        return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(addedOrder.getId()).get());
     }
 
     @Transactional

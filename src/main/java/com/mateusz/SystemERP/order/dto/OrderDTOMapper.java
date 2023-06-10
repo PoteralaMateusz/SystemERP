@@ -63,7 +63,7 @@ public class OrderDTOMapper {
                 orderAddDTO.price(),
                 orderAddDTO.products()
                         .stream()
-                        .map(productDTOMapper::mapProductAddDTO)
+                        .map(productDTOMapper::mapProductToOrderAddDTO)
                         .collect(Collectors.toList())
         );
     }
@@ -78,7 +78,7 @@ public class OrderDTOMapper {
                 order.getPrice(),
                 order.getProducts()
                         .stream()
-                        .map(productDTOMapper::mapProductAddDTO)
+                        .map(productDTOMapper::mapProductToOrderAddDTO)
                         .collect(Collectors.toList())
         );
     }

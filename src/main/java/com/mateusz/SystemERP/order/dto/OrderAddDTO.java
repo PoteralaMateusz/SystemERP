@@ -1,6 +1,7 @@
 package com.mateusz.SystemERP.order.dto;
 
 import com.mateusz.SystemERP.product.dta.ProductAddDTO;
+import com.mateusz.SystemERP.product.dta.ProductToOrderAddDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +14,6 @@ public record OrderAddDTO(
         LocalDate deadline,
         LocalDate finishDate,
         BigDecimal price,
-        List<ProductAddDTO> products
+        List<ProductToOrderAddDTO> products
 ) {
 }

@@ -9,7 +9,7 @@ public record ProductDTO(
         Long id,
         String drawingName,
         String pieces,
-        double totalWeight,
+        Double totalWeight,
         Long orderId,
         List<ItemDTO> items
 ) {

@@ -1,6 +1,5 @@
 package com.mateusz.SystemERP.product.dta;
 
-import com.mateusz.SystemERP.item.ItemRepository;
 import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.order.OrderRepository;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductDTOMapper {
     private final OrderRepository orderRepository;
-    private final ItemRepository itemRepository;
+
     private final ItemDTOMapper itemDTOMapper;
 
     public Product mapProductDTO(ProductDTO productDTO) {
@@ -53,7 +52,9 @@ public class ProductDTOMapper {
                 productAddDTO.drawingName(),
                 productAddDTO.pieces(),
                 productAddDTO.totalWeight(),
-                null,
+                orderRepository.findOrderById(productAddDTO.orderId())
+                        .orElseThrow(() ->
+                                new OrderNotFoundException(productAddDTO.orderId())),
                 productAddDTO.items()
                         .stream()
                         .map(itemDTOMapper::mapAddDTO)
@@ -63,6 +64,33 @@ public class ProductDTOMapper {
 
     public ProductAddDTO mapProductAddDTO(Product product) {
         return new ProductAddDTO(
+                product.getDrawingName(),
+                product.getPieces(),
+                product.getTotalWeight(),
+                product.getOrder().getId(),
+                product.getItems()
+                        .stream()
+                        .map(itemDTOMapper::mapAddDTO)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public Product mapProductToOrderAddDTO(ProductToOrderAddDTO productToOrderAddDTO) {
+        return new Product(
+                null,
+                productToOrderAddDTO.drawingName(),
+                productToOrderAddDTO.pieces(),
+                productToOrderAddDTO.totalWeight(),
+                null,
+                productToOrderAddDTO.items()
+                        .stream()
+                        .map(itemDTOMapper::mapAddDTO)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public ProductToOrderAddDTO mapProductToOrderAddDTO(Product product) {
+        return new ProductToOrderAddDTO(
                 product.getDrawingName(),
                 product.getPieces(),
                 product.getTotalWeight(),
