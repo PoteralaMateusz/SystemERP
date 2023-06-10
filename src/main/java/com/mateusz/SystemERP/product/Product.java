@@ -24,17 +24,11 @@ public class Product {
     private Long id;
     private String drawingName;
     private String pieces;
-    private double totalWeight;
+    private Double totalWeight;
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "product")
     private List<Item> items;
 
-
-    public Product(Order order, double totalWeight) {
-        this.order = order;
-        this.totalWeight = totalWeight;
-    }
 }

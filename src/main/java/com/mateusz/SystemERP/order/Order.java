@@ -33,7 +33,6 @@ public class Order {
     private LocalDate deadline;
     private LocalDate finishDate;
     private BigDecimal price;
-    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
     private List<Product> products;
 }
