@@ -5,7 +5,7 @@ public record ItemDTO(
         Long productId,
         String material,
         String quality,
-        int pieces,
-        double weight
+        Integer pieces,
+        Double weight
 ) {
 }

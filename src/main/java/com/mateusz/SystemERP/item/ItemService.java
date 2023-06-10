@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.item;
 
+import com.mateusz.SystemERP.item.dto.ItemAddDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.item.exceptions.ItemNotFoundException;
@@ -54,6 +55,27 @@ public class ItemService {
         itemRepository.save(itemToAdd);
         return itemDTOMapper.map(itemToAdd);
 
+    }
+
+    @Transactional
+    public ItemDTO updateItem(Long itemId, ItemAddDTO itemAddDTO){
+        return itemDTOMapper.map(itemRepository.findItemById(itemId)
+                .map(item -> {
+                    if (itemAddDTO.material() != null){
+                        item.setMaterial(itemAddDTO.material());
+                    }
+                    if (itemAddDTO.quality() != null){
+                        item.setQuality(itemAddDTO.quality());
+                    }
+                    if (itemAddDTO.pieces() != null){
+                        item.setPieces(itemAddDTO.pieces());
+                    }
+                    if (itemAddDTO.weight() != null){
+                        item.setWeight(itemAddDTO.weight());
+                    }
+                    return itemRepository.save(item);
+                }).orElseThrow(() ->
+                        new ItemNotFoundException(itemId)));
     }
 
     public ItemDTO deleteItemByID(Long itemId) {

@@ -15,6 +15,6 @@ public interface ItemRepository {
 
     void deleteById(Long id);
 
-    void addItemWithProductId(String material, int pieces, String quality, double weight, Long productId);
+    void addItemWithProductId(String material, Integer pieces, String quality, Double weight, Long productId);
 
 }

@@ -19,9 +19,9 @@ public interface SqlItemRepository extends ItemRepository, JpaRepository<Item, L
     @Query(value = "INSERT INTO ITEMS (MATERIAL, PIECES, QUALITY, WEIGHT, PRODUCT_ID) " +
             "VALUES (:material,:pieces,:quality,:weight,:productId )", nativeQuery = true)
     void addItemWithProductId(@Param("material") String material,
-                              @Param("pieces") int pieces,
+                              @Param("pieces") Integer pieces,
                               @Param("quality") String quality,
-                              @Param("weight") double weight,
+                              @Param("weight") Double weight,
                               @Param("productId") Long productId);
 
 }

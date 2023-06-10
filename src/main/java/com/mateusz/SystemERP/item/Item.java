@@ -21,7 +21,7 @@ public class Item {
     private Product product;
     private String material;
     private String quality;
-    private int pieces;
-    private double weight;
+    private Integer pieces;
+    private Double weight;
 
 }

@@ -1,5 +1,6 @@
 package com.mateusz.SystemERP.item;
 
+import com.mateusz.SystemERP.item.dto.ItemAddDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,34 +11,41 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemService service;
+    private final ItemService itemService;
 
 
     @GetMapping("/items")
     public ResponseEntity<List<ItemDTO>> findAllItems() {
         return ResponseEntity
                 .status(200)
-                .body(service.findAllItems());
+                .body(itemService.findAllItems());
     }
 
     @GetMapping("/items/{id}")
     public ResponseEntity<List<ItemDTO>> findItemsByProductId(@PathVariable Long id) {
         return ResponseEntity
                 .status(200)
-                .body(service.findItemsByProductId(id));
+                .body(itemService.findItemsByProductId(id));
     }
 
     @PostMapping("/items")
-    public ResponseEntity<ItemDTO> addOrUpdateItem(@RequestBody ItemDTO toAdd) {
+    public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO toAdd) {
         return ResponseEntity
                 .status(200)
-                .body(service.addItem(toAdd));
+                .body(itemService.addItem(toAdd));
+    }
+
+    @PatchMapping("/items/{itemId}")
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemAddDTO toUpdate){
+        return ResponseEntity
+                .status(200)
+                .body(itemService.updateItem(itemId,toUpdate));
     }
 
     @DeleteMapping("/items/{id}")
     public ResponseEntity<ItemDTO> deleteItem(@PathVariable Long id) {
         return ResponseEntity
                 .status(200)
-                .body(service.deleteItemByID(id));
+                .body(itemService.deleteItemByID(id));
     }
 }
