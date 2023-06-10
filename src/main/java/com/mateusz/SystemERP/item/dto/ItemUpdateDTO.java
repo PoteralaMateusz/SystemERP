@@ -1,7 +1,6 @@
 package com.mateusz.SystemERP.item.dto;
 
-public record ItemAddDTO(
-        Long productId,
+public record ItemUpdateDTO(
         String material,
         String quality,
         Integer pieces,

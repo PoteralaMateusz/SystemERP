@@ -51,7 +51,7 @@ public class ProductDTOMapper {
                 null,
                 productAddDTO.drawingName(),
                 productAddDTO.pieces(),
-                productAddDTO.totalWeight(),
+                null,
                 orderRepository.findOrderById(productAddDTO.orderId())
                         .orElseThrow(() ->
                                 new OrderNotFoundException(productAddDTO.orderId())),
@@ -66,7 +66,6 @@ public class ProductDTOMapper {
         return new ProductAddDTO(
                 product.getDrawingName(),
                 product.getPieces(),
-                product.getTotalWeight(),
                 product.getOrder().getId(),
                 product.getItems()
                         .stream()
@@ -80,7 +79,7 @@ public class ProductDTOMapper {
                 null,
                 productToOrderAddDTO.drawingName(),
                 productToOrderAddDTO.pieces(),
-                productToOrderAddDTO.totalWeight(),
+                null,
                 null,
                 productToOrderAddDTO.items()
                         .stream()
@@ -93,7 +92,6 @@ public class ProductDTOMapper {
         return new ProductToOrderAddDTO(
                 product.getDrawingName(),
                 product.getPieces(),
-                product.getTotalWeight(),
                 product.getItems()
                         .stream()
                         .map(itemDTOMapper::mapAddDTO)

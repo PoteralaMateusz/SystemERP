@@ -49,6 +49,7 @@ public class ItemDTOMapper {
 
     public ItemAddDTO mapAddDTO(Item item) {
         return new ItemAddDTO(
+                item.getProduct().getId(),
                 item.getMaterial(),
                 item.getQuality(),
                 item.getPieces(),
