@@ -23,5 +23,6 @@ public class Item {
     private String quality;
     private Integer pieces;
     private Double weight;
+    private Boolean productionDone = Boolean.FALSE;
 
 }

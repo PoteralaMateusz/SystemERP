@@ -19,7 +19,8 @@ public class ItemDTOMapper {
                 item.getMaterial(),
                 item.getQuality(),
                 item.getPieces(),
-                item.getWeight()
+                item.getWeight(),
+                item.getProductionDone()
         );
     }
 
@@ -32,7 +33,8 @@ public class ItemDTOMapper {
                 itemDTO.material(),
                 itemDTO.quality(),
                 itemDTO.pieces(),
-                itemDTO.weight()
+                itemDTO.weight(),
+                itemDTO.productionDone()
         );
     }
 
@@ -43,7 +45,8 @@ public class ItemDTOMapper {
                 itemAddDTO.material(),
                 itemAddDTO.quality(),
                 itemAddDTO.pieces(),
-                itemAddDTO.weight()
+                itemAddDTO.weight(),
+                Boolean.FALSE
         );
     }
 

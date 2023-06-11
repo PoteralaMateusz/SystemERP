@@ -78,6 +78,9 @@ public class ItemService {
                     if (itemUpdateDTO.weight() != null) {
                         item.setWeight(itemUpdateDTO.weight());
                     }
+                    if (itemUpdateDTO.productionDone() != null){
+                        item.setProductionDone(itemUpdateDTO.productionDone());
+                    }
                     return itemRepository.save(item);
                 }).orElseThrow(() ->
                         new ItemNotFoundException(itemId));

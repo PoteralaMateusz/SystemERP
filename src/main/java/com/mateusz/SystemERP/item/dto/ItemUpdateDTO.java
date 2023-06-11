@@ -4,6 +4,7 @@ public record ItemUpdateDTO(
         String material,
         String quality,
         Integer pieces,
-        Double weight
+        Double weight,
+        Boolean productionDone
 ) {
 }
