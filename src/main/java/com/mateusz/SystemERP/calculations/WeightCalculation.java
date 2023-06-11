@@ -12,9 +12,8 @@ public class WeightCalculation {
     static public Double calculateProductTotalWeight(Product product) {
         return product.getItems()
                 .stream()
-                .map(Item::getWeight)
+                .map(item -> item.getWeight() * item.getPieces())
                 .reduce(Double::sum)
                 .orElse(0D);
-
     }
 }
