@@ -1,15 +1,13 @@
 package com.mateusz.SystemERP.order;
 
+import com.mateusz.SystemERP.calculations.WeightCalculation;
 import com.mateusz.SystemERP.customer.Customer;
 import com.mateusz.SystemERP.customer.CustomerRepository;
 import com.mateusz.SystemERP.customer.dto.CustomerDTOMapper;
 import com.mateusz.SystemERP.customer.exceptions.CustomerNotFoundException;
 import com.mateusz.SystemERP.item.Item;
 import com.mateusz.SystemERP.item.ItemRepository;
-import com.mateusz.SystemERP.order.dto.OrderAddDTO;
-import com.mateusz.SystemERP.order.dto.OrderDTO;
-import com.mateusz.SystemERP.order.dto.OrderDTOMapper;
-import com.mateusz.SystemERP.order.dto.OrderUpdateDTO;
+import com.mateusz.SystemERP.order.dto.*;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
@@ -19,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,23 +60,6 @@ public class OrderService {
                 .map(orderDTOMapper::mapOrderDTO)
                 .orElseThrow(() ->
                         new OrderNotFoundException("Orders with order number " + orderNumber + " does not exist"));
-    }
-
-    public OrderDTO updateCustomerInOrderById(Long orderId, String customerId) {
-        return orderRepository.findOrderById(orderId)
-                .map(order -> {
-                    customerRepository.findCustomerByName(customerId)
-                            .map(customer -> {
-                                order.setCustomer(customer);
-                                orderRepository.save(order);
-                                return customer;
-                            })
-                            .orElseThrow(() ->
-                                    new CustomerNotFoundException(customerId));
-                    return orderDTOMapper.mapOrderDTO(order);
-                }).orElseThrow(() ->
-                        new OrderNotFoundException(orderId));
-
     }
 
     public OrderDTO setFinishDateWhenOrderIsDoneForCurrent(Long orderId) {
@@ -125,6 +107,9 @@ public class OrderService {
                 itemRepository.save(item);
                 productToSave.getItems().add(item);
             }
+            Product addedProduct = productRepository.findProductById(productToSave.getId()).get();
+            addedProduct.setTotalWeight(WeightCalculation.calculateProductTotalWeight(addedProduct));
+            productRepository.save(addedProduct);
         }
 
         return orderDTOMapper.mapOrderDTO(orderRepository.findOrderById(addedOrder.getId()).get());
@@ -141,22 +126,38 @@ public class OrderService {
                             })
                             .orElseThrow(() ->
                                     new CustomerNotFoundException(orderUpdateDTO.customerId()));
-                    if (orderUpdateDTO.orderNumber() != null){
+                    if (orderUpdateDTO.orderNumber() != null) {
                         order.setOrderNumber(orderUpdateDTO.orderNumber());
                     }
-                    if (orderUpdateDTO.deadline() != null){
+                    if (orderUpdateDTO.deadline() != null) {
                         order.setDeadline(orderUpdateDTO.deadline());
                     }
-                    if (orderUpdateDTO.finishDate() != null){
+                    if (orderUpdateDTO.finishDate() != null) {
                         order.setFinishDate(orderUpdateDTO.finishDate());
                     }
-                    if (orderUpdateDTO.price() != null){
+                    if (orderUpdateDTO.price() != null) {
                         order.setPrice(orderUpdateDTO.price());
                     }
                     return orderRepository.save(order);
                 })
                 .orElseThrow(() ->
                         new OrderNotFoundException(orderId)));
+
+    }
+
+    public OrderStatsDTO getOrderStats(Long orderId) {
+        Order orderToStats = orderRepository.findOrderById(orderId)
+                .orElseThrow(() ->
+                        new OrderNotFoundException(orderId));
+        return new OrderStatsDTO(
+                orderId,
+                orderToStats.getCustomer().getName(),
+                orderToStats.getOrderNumber(),
+                ChronoUnit.DAYS.between(LocalDate.now(), orderToStats.getDeadline()),
+                WeightCalculation.calculateOrderWeight(orderToStats),
+                WeightCalculation.calculateOrderLeftWeightToDone(orderToStats),
+                WeightCalculation.calculateWorkProgress(orderToStats)
+        );
 
     }
 }
