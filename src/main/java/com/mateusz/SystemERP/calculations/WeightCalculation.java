@@ -29,20 +29,17 @@ public class WeightCalculation {
     static public Double calculateOrderLeftWeightToDone(Order order) {
         return order.getProducts()
                 .stream()
-                .map(product -> {
-                    product.setItems(product.getItems()
+                .flatMap(product -> product.getItems()
                             .stream()
-                            .filter(item -> !item.getProductionDone())
-                            .collect(Collectors.toList()));
-                    return product;
-                })
-                .toList().stream()
-                .map(WeightCalculation::calculateProductTotalWeight)
+                            .map(item -> item.getDonePieces() * item.getWeight())
+                )
+                .toList()
+                .stream()
                 .reduce(Double::sum)
                 .orElse(0D);
     }
 
     static public Double calculateWorkProgress(Order order) {
-        return (1 - calculateOrderLeftWeightToDone(order) / calculateOrderWeight(order)) * 100;
+        return  calculateOrderLeftWeightToDone(order) / calculateOrderWeight(order) * 100;
     }
 }

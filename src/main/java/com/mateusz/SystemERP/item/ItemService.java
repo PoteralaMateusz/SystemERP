@@ -5,6 +5,7 @@ import com.mateusz.SystemERP.item.dto.ItemDTO;
 import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.item.dto.ItemUpdateDTO;
 import com.mateusz.SystemERP.item.exceptions.ItemNotFoundException;
+import com.mateusz.SystemERP.item.exceptions.ItemPiecesOutOfBoundsException;
 import com.mateusz.SystemERP.product.Product;
 import com.mateusz.SystemERP.product.ProductRepository;
 import com.mateusz.SystemERP.product.exceptions.ProductNotFoundException;
@@ -78,8 +79,12 @@ public class ItemService {
                     if (itemUpdateDTO.weight() != null) {
                         item.setWeight(itemUpdateDTO.weight());
                     }
-                    if (itemUpdateDTO.productionDone() != null){
-                        item.setProductionDone(itemUpdateDTO.productionDone());
+                    if (itemUpdateDTO.donePieces() != null) {
+                        if (itemUpdateDTO.donePieces() <= item.getPieces()) {
+                            item.setDonePieces(itemUpdateDTO.donePieces());
+                        } else {
+                            throw new ItemPiecesOutOfBoundsException(item.getId(), item.getPieces(), itemUpdateDTO.donePieces());
+                        }
                     }
                     return itemRepository.save(item);
                 }).orElseThrow(() ->

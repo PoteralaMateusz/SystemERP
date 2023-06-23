@@ -6,7 +6,7 @@ public record ItemDTO(
         String material,
         String quality,
         Integer pieces,
-        Double weight,
-        Boolean productionDone
+        Integer donePieces,
+        Double weight
 ) {
 }

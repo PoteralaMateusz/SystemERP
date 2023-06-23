@@ -6,7 +6,7 @@ public record OrderStatsDTO(
         String orderNumber,
         Long daysToDeadline,
         Double orderWeight,
-        Double leftWeight,
+        Double doneWeight,
         Double workProgress
 ) {
 }

@@ -22,7 +22,7 @@ public class Item {
     private String material;
     private String quality;
     private Integer pieces;
+    private Integer donePieces;
     private Double weight;
-    private Boolean productionDone = Boolean.FALSE;
 
 }
