@@ -16,4 +16,11 @@ public class ItemGlobalExceptionHandler {
         return exception.getMessage();
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ItemPiecesOutOfBoundsException.class)
+    String itemPiecesOutOfBoundsException(ItemPiecesOutOfBoundsException exception){
+        return exception.getMessage();
+    }
+
 }
