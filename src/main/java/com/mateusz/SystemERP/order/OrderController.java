@@ -78,5 +78,13 @@ public class OrderController {
                 .body(orderService.getOrderStats(orderId));
     }
 
+    @GetMapping("/orders/stats")
+    public ResponseEntity<List<OrderStatsDTO>> getOrdersStats() {
+        return ResponseEntity
+                .status(200)
+                .body(orderService.getOrdersStats());
+    }
+
+
 
 }
