@@ -160,4 +160,19 @@ public class OrderService {
         );
 
     }
+
+    public List<OrderStatsDTO> getOrdersStats() {
+        List<Order> orders = orderRepository.findAll();
+        return orders
+                .stream()
+                .map(order -> new OrderStatsDTO(
+                        order.getId(),
+                        order.getCustomer().getName(),
+                        order.getOrderNumber(),
+                        ChronoUnit.DAYS.between(LocalDate.now(), order.getDeadline()),
+                        WeightCalculation.calculateOrderWeight(order),
+                        WeightCalculation.calculateOrderLeftWeightToDone(order),
+                        WeightCalculation.calculateWorkProgress(order)))
+                .collect(Collectors.toList());
+    }
 }
