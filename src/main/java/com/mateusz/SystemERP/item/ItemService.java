@@ -80,7 +80,7 @@ public class ItemService {
                         item.setWeight(itemUpdateDTO.weight());
                     }
                     if (itemUpdateDTO.donePieces() != null) {
-                        if (itemUpdateDTO.donePieces() <= item.getPieces()) {
+                        if (itemUpdateDTO.donePieces() <= (item.getPieces() * item.getProduct().getPieces()) && itemUpdateDTO.donePieces() >= 0) {
                             item.setDonePieces(itemUpdateDTO.donePieces());
                         } else {
                             throw new ItemPiecesOutOfBoundsException(item.getId(), item.getPieces(), itemUpdateDTO.donePieces());
