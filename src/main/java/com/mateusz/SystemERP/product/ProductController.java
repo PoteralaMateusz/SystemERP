@@ -22,13 +22,21 @@ public class ProductController {
                         .findAllProducts());
     }
 
-    @GetMapping("/products/{orderId}")
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ProductDTO> findProductById(@PathVariable Long productId){
+        return ResponseEntity
+                .status(200)
+                .body(productService.findProductById(productId));
+    }
+
+    @GetMapping("/products/order/{orderId}")
     public ResponseEntity<List<ProductDTO>> findProductByOrderId(@PathVariable Long orderId) {
         return ResponseEntity
                 .status(200)
                 .body(productService
                         .findProductsByOrderId(orderId));
     }
+
 
     @PostMapping("/products")
     public ResponseEntity<ProductDTO> createProductByOrderId(@RequestBody ProductAddDTO toAdd) {

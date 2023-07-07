@@ -56,6 +56,12 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public ProductDTO findProductById(Long productId){
+        return productRepository.findProductById(productId)
+                .map(productDTOMapper::mapProductDTO)
+                .orElseThrow(() -> new ProductNotFoundException("Products with id " + productId + " does not exist."));
+    }
+
     @Transactional
     public ProductDTO createProduct(ProductAddDTO toSave) {
         List<Item> itemsToSave = toSave.items()
