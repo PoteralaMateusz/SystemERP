@@ -37,6 +37,12 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+    public ItemDTO findItemById(Long id){
+        return itemRepository.findItemById(id)
+                .map(itemDTOMapper::map)
+                .orElseThrow(() -> new ItemNotFoundException("Item with id:" + id + " does not exist."));
+    }
+
     public List<ItemDTO> findItemsByProductId(Long id) {
         List<Item> itemsByProductId = itemRepository.findItemsByProductId(id);
         if (itemsByProductId.isEmpty()) {

@@ -23,6 +23,13 @@ public class ItemController {
     }
 
     @GetMapping("/items/{id}")
+    public ResponseEntity<ItemDTO> findItemById(@PathVariable Long id) {
+        return ResponseEntity
+                .status(200)
+                .body(itemService.findItemById(id));
+    }
+
+    @GetMapping("/items/product/{id}")
     public ResponseEntity<List<ItemDTO>> findItemsByProductId(@PathVariable Long id) {
         return ResponseEntity
                 .status(200)
@@ -37,10 +44,10 @@ public class ItemController {
     }
 
     @PatchMapping("/items/{itemId}")
-    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemUpdateDTO toUpdate){
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long itemId, @RequestBody ItemUpdateDTO toUpdate) {
         return ResponseEntity
                 .status(200)
-                .body(itemService.updateItem(itemId,toUpdate));
+                .body(itemService.updateItem(itemId, toUpdate));
     }
 
     @DeleteMapping("/items/{id}")
