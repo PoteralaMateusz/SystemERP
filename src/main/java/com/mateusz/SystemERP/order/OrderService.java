@@ -165,6 +165,7 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll();
         return orders
                 .stream()
+                .filter(order -> order.getFinishDate() == null)
                 .map(order -> new OrderStatsDTO(
                         order.getId(),
                         order.getCustomer().getName(),
