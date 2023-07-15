@@ -56,4 +56,11 @@ public class ItemController {
                 .status(200)
                 .body(itemService.deleteItemByID(id));
     }
+
+    @PostMapping("/items/progress/{itemId}/{donePieces}")
+    public ResponseEntity<ItemDTO> addProgressToItem(@PathVariable Long itemId,@PathVariable Integer donePieces){
+        return ResponseEntity
+                .status(200)
+                .body(itemService.addProgressToItem(itemId,donePieces));
+    }
 }

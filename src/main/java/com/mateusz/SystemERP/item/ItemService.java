@@ -118,4 +118,19 @@ public class ItemService {
 
         return itemDTOMapper.map(itemToDelete);
     }
+    @Transactional
+    public ItemDTO addProgressToItem(Long itemId,Integer donePieces){
+        Item updateProgressItem = itemRepository.findItemById(itemId)
+                .map(item -> {
+                    if (item.getDonePieces() + donePieces <= (item.getPieces() * item.getProduct().getPieces())) {
+                        item.setDonePieces(item.getDonePieces() + donePieces);
+                    } else {
+                        throw new ItemPiecesOutOfBoundsException(item.getId(), item.getPieces(), item.getDonePieces() + donePieces);
+                    }
+                    return item;
+                })
+                .orElseThrow(() ->
+                        new ItemNotFoundException(itemId));
+        return itemDTOMapper.map(updateProgressItem);
+    }
 }
