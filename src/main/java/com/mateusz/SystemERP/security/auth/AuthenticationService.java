@@ -2,6 +2,7 @@ package com.mateusz.SystemERP.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateusz.SystemERP.security.config.JwtService;
+import com.mateusz.SystemERP.security.exceptions.UserNotFoundException;
 import com.mateusz.SystemERP.security.token.Token;
 import com.mateusz.SystemERP.security.token.TokenRepository;
 import com.mateusz.SystemERP.security.user.Role;
@@ -44,14 +45,16 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var user = repository.findByUsername(request.getEmail())
+                .orElseThrow(
+                        () -> new UserNotFoundException(request.getEmail())
+                );
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByUsername(request.getEmail())
-                .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
