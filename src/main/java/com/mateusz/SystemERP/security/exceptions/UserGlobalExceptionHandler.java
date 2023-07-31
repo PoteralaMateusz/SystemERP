@@ -1,6 +1,5 @@
 package com.mateusz.SystemERP.security.exceptions;
 
-import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +12,13 @@ public class UserGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     String userNotFoundException(UserNotFoundException exception){
+        return exception.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UserExistsException.class)
+    String userExistsException(UserExistsException exception){
         return exception.getMessage();
     }
 }
