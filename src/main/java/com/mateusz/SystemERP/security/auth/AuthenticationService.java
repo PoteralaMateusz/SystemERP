@@ -1,23 +1,18 @@
 package com.mateusz.SystemERP.security.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateusz.SystemERP.security.config.JwtService;
+import com.mateusz.SystemERP.security.exceptions.UserExistsException;
 import com.mateusz.SystemERP.security.exceptions.UserNotFoundException;
 import com.mateusz.SystemERP.security.token.Token;
 import com.mateusz.SystemERP.security.token.TokenRepository;
 import com.mateusz.SystemERP.security.user.Role;
 import com.mateusz.SystemERP.security.user.User;
 import com.mateusz.SystemERP.security.user.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +24,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.findByUsername(request.getEmail()).isPresent()){
+            throw new UserExistsException(request.getEmail());
+        }
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
