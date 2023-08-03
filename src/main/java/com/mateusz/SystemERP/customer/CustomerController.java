@@ -20,11 +20,11 @@ public class CustomerController {
                 .body(customerService.getAllCustomers());
     }
 
-    @GetMapping("/customers/{name}")
-    public ResponseEntity<CustomerDTO> getCustomerByName(@PathVariable String name) {
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         return ResponseEntity
                 .status(200)
-                .body(customerService.getCustomerByName(name));
+                .body(customerService.getCustomerById(id));
     }
 
     @PostMapping("/customers")

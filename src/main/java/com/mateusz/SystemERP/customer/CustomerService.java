@@ -29,13 +29,13 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public CustomerDTO getCustomerByName(String name) {
+    public CustomerDTO getCustomerById(Long id) {
         return customerRepository
-                .findCustomerByName(name)
+                .findCustomerById(id)
                 .filter(customer -> !customer.isDeleted())
                 .map(customerDTOMapper::mapCustomerDTO)
                 .orElseThrow(() ->
-                        new CustomerNotFoundException("Customer with name " + name + " does not exist"));
+                        new CustomerNotFoundException("Customer with id " + id + " does not exist"));
     }
 
     @Transactional
