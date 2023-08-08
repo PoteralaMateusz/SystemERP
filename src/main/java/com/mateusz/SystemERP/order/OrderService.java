@@ -155,7 +155,7 @@ public class OrderService {
                 orderToStats.getOrderNumber(),
                 ChronoUnit.DAYS.between(LocalDate.now(), orderToStats.getDeadline()),
                 WeightCalculation.calculateOrderWeight(orderToStats),
-                WeightCalculation.calculateOrderLeftWeightToDone(orderToStats),
+                WeightCalculation.calculateOrderDoneWeight(orderToStats),
                 WeightCalculation.calculateWorkProgress(orderToStats)
         );
 
@@ -172,7 +172,7 @@ public class OrderService {
                         order.getOrderNumber(),
                         ChronoUnit.DAYS.between(LocalDate.now(), order.getDeadline()),
                         WeightCalculation.calculateOrderWeight(order),
-                        WeightCalculation.calculateOrderLeftWeightToDone(order),
+                        WeightCalculation.calculateOrderDoneWeight(order),
                         WeightCalculation.calculateWorkProgress(order)))
                 .collect(Collectors.toList());
     }

@@ -5,8 +5,6 @@ import com.mateusz.SystemERP.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class WeightCalculation {
@@ -26,12 +24,12 @@ public class WeightCalculation {
                 .orElse(0D);
     }
 
-    static public Double calculateOrderLeftWeightToDone(Order order) {
+    static public Double calculateOrderDoneWeight(Order order) {
         return order.getProducts()
                 .stream()
                 .flatMap(product -> product.getItems()
                             .stream()
-                            .map(item -> item.getDonePieces() * item.getWeight())
+                            .map(item -> item.getDonePieces() * item.getWeight() * product.getPieces())
                 )
                 .toList()
                 .stream()
@@ -40,6 +38,6 @@ public class WeightCalculation {
     }
 
     static public Double calculateWorkProgress(Order order) {
-        return  calculateOrderLeftWeightToDone(order) / calculateOrderWeight(order) * 100;
+        return  calculateOrderDoneWeight(order) / calculateOrderWeight(order) * 100;
     }
 }
