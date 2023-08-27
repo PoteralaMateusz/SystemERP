@@ -7,6 +7,7 @@ import com.mateusz.SystemERP.item.ItemRepository;
 import com.mateusz.SystemERP.item.dto.ItemDTOMapper;
 import com.mateusz.SystemERP.order.dto.OrderDTO;
 import com.mateusz.SystemERP.order.dto.OrderDTOMapper;
+import com.mateusz.SystemERP.order.dto.OrderStatsDTO;
 import com.mateusz.SystemERP.order.exceptions.OrderNotFoundException;
 import com.mateusz.SystemERP.product.ProductRepository;
 import com.mateusz.SystemERP.product.dta.ProductDTOMapper;
@@ -57,7 +58,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw OrderNotFoundException when order dont exists")
+    @DisplayName("Should return order when order by id exists")
     void findByExistingOrderId() {
         //given
         OrderRepository mockOrderRepository = mock(OrderRepository.class);
@@ -83,14 +84,56 @@ class OrderServiceTest {
     }
 
     @Test
-    void findOrderByOrderNumber() {
+    @DisplayName("Should throw OrderNotFoundException when order dont exists")
+    void getOrderStatsWhenOrderIdDontExist() {
+        //given
+        OrderRepository mockOrderRepository = mock(OrderRepository.class);
+        CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
+        ProductRepository mockProductRepository = mock(ProductRepository.class);
+        ItemRepository mockItemRepository = mock(ItemRepository.class);
+        CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper(mockCustomerRepository);
+        ItemDTOMapper itemDTOMapper = new ItemDTOMapper(mockProductRepository);
+        ProductDTOMapper productDTOMapper = new ProductDTOMapper(mockOrderRepository,itemDTOMapper);
+        OrderDTOMapper orderDTOMapper = new OrderDTOMapper(mockCustomerRepository,customerDTOMapper,productDTOMapper);
+
+        OrderService orderService = new OrderService(mockOrderRepository,mockCustomerRepository,mockProductRepository,
+                mockItemRepository,orderDTOMapper,customerDTOMapper,productDTOMapper);
+        //when
+        when(mockOrderRepository.findOrderById(anyLong())).thenReturn(Optional.empty());
+        Long orderId = 1L;
+        //then
+        try {
+            orderService.getOrderStats(orderId);
+        }
+        catch (Exception e){
+            assertThat(e)
+                    .isInstanceOf(OrderNotFoundException.class)
+                    .hasMessageContaining(orderId + " does not exist.");
+        }
     }
 
     @Test
-    void setFinishDateWhenOrderIsDoneForCurrent() {
-    }
+    @DisplayName("Should return OrderStatsDTO when order exists")
+    void getOrderStatsWhenOrderIdExist() {
+        //given
+        OrderRepository mockOrderRepository = mock(OrderRepository.class);
+        CustomerRepository mockCustomerRepository = mock(CustomerRepository.class);
+        ProductRepository mockProductRepository = mock(ProductRepository.class);
+        ItemRepository mockItemRepository = mock(ItemRepository.class);
+        CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper(mockCustomerRepository);
+        ItemDTOMapper itemDTOMapper = new ItemDTOMapper(mockProductRepository);
+        ProductDTOMapper productDTOMapper = new ProductDTOMapper(mockOrderRepository,itemDTOMapper);
+        OrderDTOMapper orderDTOMapper = new OrderDTOMapper(mockCustomerRepository,customerDTOMapper,productDTOMapper);
 
-    @Test
-    void getOrderStats() {
+        OrderService orderService = new OrderService(mockOrderRepository,mockCustomerRepository,mockProductRepository,
+                mockItemRepository,orderDTOMapper,customerDTOMapper,productDTOMapper);
+        Customer customer = new Customer(1L,"Customer","Country","City","Street",123,134,new ArrayList<>());
+        Long orderId = 1L;
+        Order orderToFind = new Order(orderId,customer,"05-2023", LocalDate.now(), LocalDate.now().plusDays(30L),null, BigDecimal.valueOf(12500),new ArrayList<>());
+        //when
+        when(mockOrderRepository.findOrderById(anyLong())).thenReturn(Optional.of(orderToFind));
+        OrderStatsDTO result = orderService.getOrderStats(orderId);
+        //then
+       assertEquals(result.daysToDeadline(),30L);
     }
 }
