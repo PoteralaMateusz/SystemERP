@@ -89,16 +89,4 @@ class CustomerServiceTest {
         assertEquals("Warszawa",result.city());
 
     }
-
-    @Test
-    void addCustomer() {
-    }
-
-    @Test
-    void updateCustomer() {
-    }
-
-    @Test
-    void deleteById() {
-    }
 }
